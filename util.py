@@ -5,13 +5,6 @@ from datetime import datetime
 
 now = datetime.now()
 
-list_of_repo = [
-    "Early old works",
-    "Git management",
-]
-
-list_of_location = [f".\{elt}" for elt in list_of_repo]
-
 
 def push(folder_location, tag_message=""):
     dt_string = now.strftime("%d/%m/%Y %H:%M:%S")  # 16/09/2022 22:29:34
@@ -28,10 +21,6 @@ def push(folder_location, tag_message=""):
     subprocess.run(f"git push origin main", shell=True, cwd=folder_location)
 
     print(f"Completed. Tag: {dt_string}")
-
-
-for elt in list_of_location:
-    push(elt)
 
 
 def clean_undone_commit():
