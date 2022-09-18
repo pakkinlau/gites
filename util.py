@@ -18,8 +18,10 @@ def push(folder_location, tag_message=""):
     subprocess.run(
         f'git commit -m"{dt_string}, {tag_message}"', shell=True, cwd=folder_location
     )
-    subprocess.run(f"git push origin main", shell=True, cwd=folder_location)
-
+    subprocess.run(
+        f"git push origin main", shell=True, cwd=folder_location, stdout=subprocess.PIPE
+    )
+    # Catch the output and detect if any error exist, stop the loop.
     print(f"Completed. Tag: {dt_string}")
 
 
