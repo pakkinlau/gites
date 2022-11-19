@@ -1,3 +1,5 @@
+# Use this when choosing "All programming projects" as root folder.
+
 import util
 
 list_of_repo = [
