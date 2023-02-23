@@ -12,9 +12,15 @@ def push(folder_location, tag_message=""):
     """ Change your file location here """
     # os.chdir(folder_location.encode("unicode_escape"))
     subprocess.run("git status", shell=True, cwd=folder_location)
-    subprocess.run("git add --all", shell=True, cwd=folder_location)
+    
+    
+    #""" Check whether it is running in main branch"""
+    #subprocess.run("git branch main")
+    #subprocess.run("git checkout main")
+    
 
     """ Change your upload tag here"""
+    subprocess.run("git add --all", shell=True, cwd=folder_location)
     subprocess.run(
         f'git commit -m"{dt_string}, {tag_message}"', shell=True, cwd=folder_location
     )
