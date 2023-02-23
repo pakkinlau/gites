@@ -13,7 +13,11 @@ list_of_repo = [
 
 list_of_location = [f".\{elt}" for elt in list_of_repo]
 
+# Initialize Git LFS for the repository.
+os.system("git lfs install")
+
 for elt in list_of_location:
+    # Track large files with Git LFS.
+    os.system(f"cd {elt} && git lfs track '*.zip' '*.tar.gz' '*.mp4', '*.pdf'")
+    # Push changes to GitHub.
     util.push(elt)
-    # Get the utils.py --- check the output lines done. 
-    # Then copy the important lines, save it to 
