@@ -23,6 +23,6 @@ os.system("git lfs install")
 
 for elt in list_of_location:
     # Track large files with Git LFS.
-    os.system(f"cd {elt} && git lfs track '*.zip' + ' *.tar.gz' + ' *.mp4' + ' *.pdf'")
+    os.system(f"cd {elt} && git lfs track '*.zip' ' *.tar.gz' '*.mp4' '*.pdf'")
     # Push changes to GitHub.
     util.push(elt)
