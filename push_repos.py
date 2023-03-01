@@ -13,7 +13,7 @@ list_of_repo = [
     "Tutorial template",
     "Video materials",
 ]
-
+# "tutorial",
 
 
 list_of_location = [f".\{elt}" for elt in list_of_repo]
