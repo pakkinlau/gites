@@ -12,6 +12,7 @@ list_of_repo = [
     "Textual notes",
     "Tutorial template",
     "Video materials",
+    "JS webpage coding gym"
 ]
 # "tutorial",
 
