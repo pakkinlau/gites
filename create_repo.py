@@ -5,8 +5,8 @@ import subprocess
 # 3. Make sure the repo is empty and clean initial state.
 # 4. Make sure git LFS is installed on the computer. Download link: https://git-lfs.com/
 
-full_folder_location = r"C:\Users\kinla\All_programming_projects\JS webpage coding gym"
-repo_url = "https://github.com/pakkinlau/JS-webpage-coding-gym.git" # 
+full_folder_location = r"D:\All_programming_projects\Python coding gym"
+repo_url = "https://github.com/pakkinlau/Python-coding-gym.git" # 
 
 command1 = f"git init"
 command2 = f"git checkout -b main"
