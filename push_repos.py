@@ -2,7 +2,7 @@ import util
 import os
 
 # Use this when choosing "All programming projects" as root folder.
-os.chdir(r"C:\Users\kinla\All_programming_projects")
+os.chdir(r"D:\All_programming_projects")
 
 list_of_repo = [
     "Early old works",
