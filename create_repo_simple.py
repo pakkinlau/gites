@@ -3,10 +3,10 @@ import os
 import util
 
 #####################
-# Update information here: 
+# Update information here:
 
 full_folder_location = r"D:\All_programming_projects\Video materials"
-repo_url = "https://github.com/pakkinlau/Video-material.git" 
+repo_url = "https://github.com/pakkinlau/Video-material.git"
 
 #####################
 # The script is in the following:
@@ -55,6 +55,5 @@ if check_remote_origin():
 else:
     run(f"git remote add origin {repo_url}")
 
+run(command5)  # Display remote URLs for verification
 run(command6)
-
-
