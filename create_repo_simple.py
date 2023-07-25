@@ -28,6 +28,15 @@ def check_remote_origin():
 def update_remote_origin():
     subprocess.run(f"git remote set-url origin {repo_url}", shell=True)
 
+def delete_git_folder(location):
+    git_folder = os.path.join(location, ".git")
+    if os.path.exists(git_folder):
+        print(f"Deleting existing .git folder at {git_folder}")
+        run(f"rm -rf {git_folder}")
+
+# Delete the .git folder if it exists
+delete_git_folder(full_folder_location)
+
 command1 = f"git init"
 command2 = f"git add ."
 command3 = f'git commit -m "first commit"'
