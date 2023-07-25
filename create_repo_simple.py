@@ -13,15 +13,8 @@ repo_url = "https://github.com/pakkinlau/Video-material.git"
 #####################
 # The script is in the following:
 
-def run(command, location=os.getcwd()):
-    try:
-        print(f"Run: {command}")
-        subprocess.run(f"{command}", shell=True, cwd=location, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True)
-    except subprocess.CalledProcessError as e:
-        print(f"{command} failed.")
-        return
 
-def rrun(command):
+def run(command):
     subprocess.run(command)
 
 command1 = f"git init"
