@@ -25,7 +25,7 @@ def run(command, location=os.getcwd()):
 command1 = f"git init"
 command2 = f"git add ."
 command3 = f'git commit -m "first commit"'
-command4 = f"git checkout -b main" # checkout switch between branch. -b create a new branch and switch to it. 
+command4 = f"git branch -M main" # checkout switch between branch. -b create a new branch and switch to it. 
 command5 = f"git remote add origin {repo_url}" 
 command6 = f"git push -u origin main"
 
