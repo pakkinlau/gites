@@ -11,9 +11,14 @@ repo_url = "https://github.com/pakkinlau/Video-material.git"
 #####################
 # The script is in the following:
 
-def run(command):
-    subprocess.run(command)
+def run(command, location=os.getcwd()):
     print("========================")
+    try:
+        print(f"Run: {command}")
+        subprocess.run(f"{command}", shell=True, cwd=location, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True)
+    except subprocess.CalledProcessError as e:
+        print(f"{command} failed.")
+        return
 
 def check_remote_origin():
     result = subprocess.run("git remote -v", capture_output=True, text=True, shell=True)
