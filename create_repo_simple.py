@@ -18,7 +18,7 @@ def run(command, location=os.getcwd()):
         result = subprocess.run(f"{command}", shell=True, cwd=location, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True, text=True)
         print(result.stdout)
     except subprocess.CalledProcessError as e:
-        print(f"{command} failed. Error: {e}")
+        print(f"Notice! This command failed. Error: {e}")
         return
 
 def check_remote_origin():
