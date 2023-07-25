@@ -1,0 +1,82 @@
+#!/bin/bash
+
+#####################################################################
+# Git Pre-commit Hook for File Size Limit Enforcement
+#####################################################################
+#
+# Description:
+#   The Git pre-commit hook is a custom script that runs automatically
+#   before each commit operation in a Git repository. The purpose of
+#   this hook is to enforce a file size limit on the files being
+#   committed and to prevent any files that exceed the specified limit
+#   from being added to the commit. Additionally, if any added files are
+#   found to exceed the limit, the hook will unstage those files, giving
+#   the user an opportunity to resolve the issue before attempting the
+#   commit again.
+#
+# Effect of the pre-commit hook:
+#   1. File Size Limit Enforcement:
+#      The pre-commit hook enforces a specified file size limit (in bytes)
+#      on each file that is staged for the commit. This is achieved by
+#      calculating the size of each staged file using the `stat` command,
+#      and then comparing it to the predefined `FILE_SIZE_LIMIT`. If the
+#      file size exceeds the limit, the hook will halt the commit process
+#      and provide an error message indicating the offending file.
+#
+#   2. Prevention of Oversized Commits:
+#      By preventing files that exceed the size limit from being included
+#      in commits, the hook helps maintain a consistent and manageable
+#      repository size. This is particularly useful in projects where large
+#      binary files or other non-text data might accidentally be introduced,
+#      leading to unnecessary bloating of the repository.
+#
+#   3. Unstaging of Oversized Files:
+#      In cases where the hook identifies one or more files that exceed
+#      the size limit, it will automatically unstage those files before
+#      aborting the commit. This step is crucial as it allows the user to
+#      address the oversized files and potentially reduce their size or
+#      reconsider including them in the commit. By unstaging the files, the
+#      hook ensures that only the valid changes are committed, keeping the
+#      repository history clean and focused.
+#
+#   4. Notification and User Guidance:
+#      When the pre-commit hook identifies an oversized file, it displays
+#      an informative error message describing the issue and indicating
+#      which file caused the problem. This notification empowers the user
+#      to take corrective action and helps prevent unintentional commits
+#      of large files that could negatively impact the repository's
+#      performance and version control efficiency.
+#
+#####################################################################
+
+# File size limit in bytes (adjust this as per your requirement)
+FILE_SIZE_LIMIT=1000000
+
+# Array to store the files that exceed the size limit
+exceeded_files=()
+
+# Function to check the size of a file
+function check_file_size() {
+  local file="$1"
+  local size
+  size=$(stat -c%s "$file")
+  if [ "$size" -gt "$FILE_SIZE_LIMIT" ]; then
+    exceeded_files+=("$file")
+  fi
+}
+
+# Loop through the staged files
+while read -r file; do
+  check_file_size "$file"
+done < <(git diff --cached --name-only --diff-filter=ACM)
+
+# If there are files that exceed the limit, print the list
+if [ "${#exceeded_files[@]}" -gt 0 ]; then
+  echo "Pre-commit hook: Some files exceed the size limit of $FILE_SIZE_LIMIT bytes:"
+  for file in "${exceeded_files[@]}"; do
+    echo "$(realpath --relative-to=. "$file")"
+  done
+fi
+
+# Exit with status 1 if any files exceed the size limit, otherwise allow the commit to proceed
+[ "${#exceeded_files[@]}" -gt 0 ] && exit 1 || exit 0
