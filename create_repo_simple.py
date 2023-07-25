@@ -11,13 +11,14 @@ repo_url = "https://github.com/pakkinlau/Video-material.git"
 #####################
 # The script is in the following:
 
-def run(command, location=os.getcwd()):
+def run(command, location=full_folder_location):
     print("========================")
     try:
         print(f"Run: {command}")
         result = subprocess.run(f"{command}", shell=True, cwd=location, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True, text=True)
         print(result.stdout)
-    except subprocess.CalledProcessError as e:
+        print(result.stderr)
+    except Exception as e:
         print(f"Notice! This command failed. Error: {e}")
         return
 
@@ -35,26 +36,30 @@ def delete_git_folder(location):
         print(f"Deleting existing .git folder at {git_folder}")
         run(f"rm -rf {git_folder}")
 
-# Delete the .git folder if it exists
-delete_git_folder(full_folder_location)
+def main():
+    run(f"cd {full_folder_location}")
+    # Delete the .git folder if it exists
+    delete_git_folder(full_folder_location)
 
-command1 = f"git init"
-command2 = f"git add ."
-command3 = f'git commit -m "first commit"'
-command4 = f"git branch -M main"
-command5 = f"git remote -v"
-command6 = f"git push -u origin main"
+    command1 = f"git init"
+    command2 = f"git add ."
+    command3 = f'git commit -m "first commit"'
+    command4 = f"git checkout -b main"
+    command5 = f"git remote -v"
+    command6 = f"git push -u origin main"
 
-run(command1)
-util.check_and_copy_pre_commit_hook(full_folder_location)
-run(command2)
-run(command3)
-run(command4)
+    run(command1)
+    util.check_and_copy_pre_commit_hook(full_folder_location)
+    run(command2)
+    run(command3)
+    run(command4)
 
-if check_remote_origin():
-    update_remote_origin()
-else:
-    run(f"git remote add origin {repo_url}")
+    if check_remote_origin():
+        update_remote_origin()
+    else:
+        run(f"git remote add origin {repo_url}")
 
-run(command5)  # Display remote URLs for verification
-run(command6)
+    run(command5)  # Display remote URLs for verification
+    run(command6)
+    
+main()

@@ -6,8 +6,8 @@ import util
 # Update information here: 
 
 
-full_folder_location = r"D:\All_programming_projects\Video materials"
-repo_url = "https://github.com/pakkinlau/Video-material.git" 
+full_folder_location = r"D:\All_programming_projects\Python coding gym"
+repo_url = "https://github.com/pakkinlau/Python-coding-gym.git" 
 
 
 #####################
