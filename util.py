@@ -45,7 +45,7 @@ def listpush(list_of_repo: list, tag_message="Automated add-commit-push"):
     
     for repo in list_of_repo:
         os.system(f"cd {repo}")
-        print(f"==============   Working for the repo:  {repo}   ==============   ")
+        print(f"+++++++++++++++++++++++++++++++++   Working for the repo:  {repo}   +++++++++++++++++++++++++++++++++")
         try:
             run("git checkout main",location=repo)
             run("git status",location=repo)
