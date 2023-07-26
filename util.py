@@ -75,9 +75,10 @@ def listpush(list_of_repo: list, tag_message="Automated add-commit-push"):
         except subprocess.CalledProcessError as e:
             print(f"Push failed with error message: {e.stderr.decode().strip()}")
             failed_repo.append(repo)
-    print(f"================================================ ====================================")
-    print(f"==============   summary: successed repo: {success_repo}   ==============   ")
-    print(f"==============   summary: failed repo: {failed_repo}   ==============   ")
+    print(f"=====================================================================================")
+    print(f"summary: successed repo: {success_repo}")
+    print(f"summary: failed repo: {failed_repo}")
+    print(f"=====================================================================================")
 
 def get_files_bigger_than_100mb(folder_path):
     file_list = []

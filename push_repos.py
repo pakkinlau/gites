@@ -21,8 +21,6 @@ def main():
         "JS webpage coding gym"
     ]
 
-
-
     repo_list = [f".\{elt}" for elt in list_of_repo]
 
     # It is resource heavy. Don't use it in an old repo.
