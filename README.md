@@ -2,9 +2,13 @@
 
 Welcome to the **Git-management** repository! This repository is a versatile package containing multiple useful functions and tools designed to enhance your Git workflow and repository management. It provides a collection of Python scripts with various functionalities to make version control easier and more efficient.
 
-## Selling Point
+## Key Feature
 
-One of the key selling points of this repository is the implementation of a pre-commit hook that prevents files larger than 100MB from being added, committed, and pushed into your Git repositories. This feature helps maintain a clean repository history and improves the "add commit push" workflow.
+One of the main highlights of this repository is the implementation of a pre-commit hook that prevents files larger than 100MB from being added, committed, and pushed into your Git repositories. This feature is designed to maintain a clean repository history and streamline the "add, commit, push" workflow, ensuring an efficient version control process.
+
+## Pre-commit Hook Script
+
+As mentioned earlier, the `push_repos.py` file in this package implements the pre-commit hook to prevent files larger than 100MB from being committed. This feature ensures that large and unnecessary files do not clutter your repository and slow down your Git workflow.
 
 ## Package Contents
 
@@ -19,10 +23,6 @@ This repository contains the following Python scripts, each serving a specific p
 4. `print_folder_file_tree.py`: A script that generates a tree-like representation of the files and folders in your repository, helping you visualize the structure of your project.
 
 5. `util.py`: A utility script containing helper functions used by other scripts within the package.
-
-## Pre-commit Hook Script
-
-As mentioned earlier, the `pre_commit_hook.py` file in this package implements the pre-commit hook to prevent files larger than 100MB from being committed. This feature ensures that large and unnecessary files do not clutter your repository and slow down your Git workflow.
 
 ### Usage
 
