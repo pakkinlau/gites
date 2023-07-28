@@ -10,7 +10,7 @@ One of the main highlights of this repository is the implementation of a pre-com
 
 As mentioned earlier, the `push_repos.py` file in this package implements the pre-commit hook to prevent files larger than 100MB from being committed. This feature ensures that large and unnecessary files do not clutter your repository and slow down your Git workflow.
 
-## Package Contents
+## Other package Contents
 
 This repository contains the following Python scripts, each serving a specific purpose:
 
