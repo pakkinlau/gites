@@ -1,6 +1,6 @@
 # Package: Git-flow-master 
 
-Welcome to the **Git flow master ** repository! This repository is a versatile package containing multiple useful functions and tools designed to enhance your Git workflow and repository management. It provides a collection of Python scripts with various functionalities to make version control easier and more efficient.
+Welcome to the **Git flow master** repository! This repository is a versatile package containing multiple useful functions and tools designed to enhance your Git workflow and repository management. It provides a collection of Python scripts with various functionalities to make version control easier and more efficient.
 
 ## Key Feature
 
@@ -41,9 +41,5 @@ Contributions to this repository are highly encouraged! If you have ideas for im
 ## License
 
 This repository is open-source and available under the [MIT License](LICENSE). You are welcome to use, modify, and distribute the code as per the terms of the license.
-
-## About the Author
-
-This repository is maintained by [Your Name], an enthusiastic developer passionate about optimizing Git workflows and simplifying version control.
 
 Enjoy using the Git-management package! 🚀
