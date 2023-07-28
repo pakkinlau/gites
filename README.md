@@ -1,46 +1,49 @@
 # Git-management Repository
 
-Welcome to the **Git-management** repository! This repository is designed to enhance your Git workflow by providing a useful pre-commit hook that prevents files larger than 100MB from being added, committed, and pushed into your Git repositories. This can significantly improve the overall performance and maintain a clean and efficient repository history.
+Welcome to the **Git-management** repository! This repository is a versatile package containing multiple useful functions and tools designed to enhance your Git workflow and repository management. It provides a collection of Python scripts with various functionalities to make version control easier and more efficient.
 
 ## Selling Point
 
-The primary selling point of this repository is the implementation of a pre-commit hook that enforces a file size limit of 100MB. When using this pre-commit hook, it becomes impossible to add, commit, and push files exceeding this limit, which ensures that large and unnecessary files do not clutter your repository and slow down the "add commit push" workflow.
+One of the key selling points of this repository is the implementation of a pre-commit hook that prevents files larger than 100MB from being added, committed, and pushed into your Git repositories. This feature helps maintain a clean repository history and improves the "add commit push" workflow.
+
+## Package Contents
+
+This repository contains the following Python scripts, each serving a specific purpose:
+
+1. `check_file_size.py`: A script that allows you to check the size of files in your repository and identify any files exceeding a specified limit, such as 100MB.
+
+2. `clone_my_own_repo.py`: A script that simplifies the process of cloning your own repositories hosted on Git platforms like GitHub or GitLab.
+
+3. `create_repo.py`: A script that streamlines the creation of new Git repositories, making it easy to initiate version control for your projects.
+
+4. `print_folder_file_tree.py`: A script that generates a tree-like representation of the files and folders in your repository, helping you visualize the structure of your project.
+
+5. `util.py`: A utility script containing helper functions used by other scripts within the package.
 
 ## Pre-commit Hook Script
 
-The pre-commit hook is implemented in the `push_repos.py` file. This Python script utilizes the Git hooks mechanism to automatically check the size of files being committed. If it detects any files larger than 100MB, it will prevent the commit from proceeding, allowing you to rectify the situation and optimize your repository's file structure.
+As mentioned earlier, the `pre_commit_hook.py` file in this package implements the pre-commit hook to prevent files larger than 100MB from being committed. This feature ensures that large and unnecessary files do not clutter your repository and slow down your Git workflow.
 
 ### Usage
 
-To utilize the pre-commit hook in your Git repositories, follow these steps:
+To use any of the scripts in this package, simply run them using Python. For example, to check file sizes, run `check_file_size.py`:
 
-1. Copy the `push_repos.pyy` script into the `.git/hooks/` directory of your repository.
+```bash
+python check_file_size.py
+```
 
-2. Ensure the script has executable permissions. If not, use the following command to grant the required permission:
-   ```bash
-   chmod +x .git/hooks/push_repos.py
-   ```
-
-3. From now on, whenever you attempt to make a commit, the pre-commit hook will automatically check for files larger than 100MB. If such files are found, the commit will be halted, providing you with the list of offending files to address the issue.
-
-**Note:** The script assumes that your root folder is specified in the `root_folder` variable within the script. Make sure to modify this variable to match the path of your repository.
-
-## Repository Structure
-
-This repository contains the following files:
-
-- `push_repos.py`: The Python script that implements the pre-commit hook preventing files larger than 100MB.
+Ensure that you have the necessary permissions and dependencies installed to execute the scripts successfully.
 
 ## Contributing
 
-Contributions to this repository are welcome! If you have any ideas for improvements or new features, feel free to open an issue or submit a pull request. Let's work together to make Git management more effective and streamlined.
+Contributions to this repository are highly encouraged! If you have ideas for improvements, additional functionalities, or bug fixes, feel free to open an issue or submit a pull request. Let's collaborate to make Git management even more powerful and user-friendly.
 
 ## License
 
-This repository is open-source and available under the [MIT License](LICENSE). Feel free to use, modify, and distribute the code as per the terms of the license.
+This repository is open-source and available under the [MIT License](LICENSE). You are welcome to use, modify, and distribute the code as per the terms of the license.
 
 ## About the Author
 
-This repository is maintained by [Your Name], a passionate developer interested in optimizing Git workflows and making version control easier for everyone.
+This repository is maintained by [Your Name], an enthusiastic developer passionate about optimizing Git workflows and simplifying version control.
 
-Happy coding! 🚀
+Enjoy using the Git-management package! 🚀
