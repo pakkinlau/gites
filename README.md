@@ -8,17 +8,17 @@ The primary selling point of this repository is the implementation of a pre-comm
 
 ## Pre-commit Hook Script
 
-The pre-commit hook is implemented in the `pre_commit_hook.py` file. This Python script utilizes the Git hooks mechanism to automatically check the size of files being committed. If it detects any files larger than 100MB, it will prevent the commit from proceeding, allowing you to rectify the situation and optimize your repository's file structure.
+The pre-commit hook is implemented in the `push_repos.py` file. This Python script utilizes the Git hooks mechanism to automatically check the size of files being committed. If it detects any files larger than 100MB, it will prevent the commit from proceeding, allowing you to rectify the situation and optimize your repository's file structure.
 
 ### Usage
 
 To utilize the pre-commit hook in your Git repositories, follow these steps:
 
-1. Copy the `pre_commit_hook.py` script into the `.git/hooks/` directory of your repository.
+1. Copy the `push_repos.pyy` script into the `.git/hooks/` directory of your repository.
 
 2. Ensure the script has executable permissions. If not, use the following command to grant the required permission:
    ```bash
-   chmod +x .git/hooks/pre_commit_hook.py
+   chmod +x .git/hooks/push_repos.py
    ```
 
 3. From now on, whenever you attempt to make a commit, the pre-commit hook will automatically check for files larger than 100MB. If such files are found, the commit will be halted, providing you with the list of offending files to address the issue.
@@ -29,7 +29,7 @@ To utilize the pre-commit hook in your Git repositories, follow these steps:
 
 This repository contains the following files:
 
-- `pre_commit_hook.py`: The Python script that implements the pre-commit hook preventing files larger than 100MB.
+- `push_repos.py`: The Python script that implements the pre-commit hook preventing files larger than 100MB.
 
 ## Contributing
 
