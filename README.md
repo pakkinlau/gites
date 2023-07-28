@@ -1,6 +1,6 @@
-# Git-management Repository
+# Package: Git-flow-master 
 
-Welcome to the **Git-management** repository! This repository is a versatile package containing multiple useful functions and tools designed to enhance your Git workflow and repository management. It provides a collection of Python scripts with various functionalities to make version control easier and more efficient.
+Welcome to the **Git flow master ** repository! This repository is a versatile package containing multiple useful functions and tools designed to enhance your Git workflow and repository management. It provides a collection of Python scripts with various functionalities to make version control easier and more efficient.
 
 ## Key Feature
 
