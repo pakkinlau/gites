@@ -1,15 +1,13 @@
 import os
-import os
 import util
 import time
 
 def main():
     start_time = time.time()
 
-    # Use this when choosing "All programming projects" as root folder.
-    root_folder = r"D:\All_programming_projects"
+    # Use this when choosing "All programming projects" as root folder.r
+    root_folder = os.path.join(os.path.expanduser("~"), "All_Github_Repos")
     os.chdir(root_folder)
-
 
     list_of_repo = [
         "Git management",
@@ -20,18 +18,12 @@ def main():
         "Video materials",
         "JS webpage coding gym"
     ]
-
-    repo_list = [f".\{elt}" for elt in list_of_repo]
-
-    # It is resource heavy. Don't use it in an old repo.
-    """ 
-    for repo in repo_list:
-        list = util.get_files_bigger_than_100mb(repo)
-        if len(list)>0:
-            sys.exit()
-        else:
-            continue
-    """
+    all_items = os.listdir(root_folder)
+    repo_list = [os.path.join(".", item) for item in all_items if os.path.isdir(os.path.join(root_folder, item)) and not item.startswith('.')]
+    print(repo_list)
+    # repo_list = [os.path.join(".", elt) for elt in list_of_repo]
+    # In linux, the result would be a list of string: ['./Git management', './Guides', './Python coding gym', './Textual notes', './Tutorial template', './Video materials', './JS webpage coding gym']
+    # After edit, the result would be : ['./Video materials', './Git management', './Textual notes', './Guides', './Tutorial template', './JS webpage coding gym', './Python coding gym', './Git-flow-master']
 
     util.listpush(repo_list)
     
@@ -44,3 +36,13 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+# This part tries to check all files size before 'util.listpush(repo_list)'. It is resource heavy. Don't use it in an old repo.
+""" 
+for repo in repo_list:
+    list = util.get_files_bigger_than_100mb(repo)
+    if len(list)>0:
+        sys.exit()
+    else:
+        continue
+"""

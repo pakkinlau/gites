@@ -19,66 +19,69 @@ def check_and_copy_pre_commit_hook(repo_location):
     else:
         print("Pre-commit hook already exists.")
 
-def run(command, location="must specify location"):
+def run(command, location):
     print("========================================================================")
-    result = None  # Initialize result with None
+    print(f"Run: {command}")
     try:
-        print(f"Run: {command}")
-        result = subprocess.run(command, cwd=location) #, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True, text=True, shell=True)
+        result = subprocess.run(command, cwd=location, shell=False, text=True, capture_output=True, check=True)
         return_code = result.returncode
+        output = result.stdout.strip()
         if return_code == 0:
             print("Command executed successfully!")
         else:
-            print(f"This part is not working as expected. Return code: {return_code}. Read the git message for information")
+            print(f"This part is not working as expected. Return code: {return_code}.")
+            print("Command output:")
+            print(output)
 
-        return return_code
-    except Exception as e:
+        return return_code, output
+    except subprocess.CalledProcessError as e:
         print(f"Notice! This command failed. Error: {e}")
-        return result  # Return the initial value of result in case of an exception
-
+        return 1, str(e)
 
 def listpush(list_of_repo: list, tag_message="Automated add-commit-push"):
-    
     success_repo = []
     failed_repo = []
-    # print the header for separating the message for each repo
-    
+
     for repo in list_of_repo:
-        os.system(f"cd {repo}")
+        # repo expect something like: './Git management'
+        print("current location: ")
+        print(os.getcwd())
         print(f"+++++++++++++++++++++++++++++++++   Working for the repo:  {repo}   +++++++++++++++++++++++++++++++++")
         try:
-            run("git checkout main",location=repo)
-            run("git status",location=repo)
-            run("git add --all",location=repo)
-            # subprocess.run("git checkout main", shell=True, cwd=repo)
-            # subprocess.run("git status", shell=True, cwd=repo)
-            # subprocess.run("git add --all", shell=True, cwd=repo)
+            run(["git", "checkout", "main"], location=repo)
+            run(["git", "status"], location=repo)
+            run(["git", "add", "--all"], location=repo)
             
             # Check and copy pre-commit hook if needed
             check_and_copy_pre_commit_hook(repo)
 
             current_time = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-            result = run(f'git commit -m"{tag_message}. Datetime tag: {current_time}"',location=repo)
-            # result = subprocess.run(f'git commit -m"{tag_message}. Datetime tag: {current_time}"', shell=True, cwd=repo, stderr=subprocess.PIPE)    # stdout=subprocess.PIPE
+            result, commit_output = run(["git", "commit", "-m", f"{tag_message}. Datetime tag: {current_time}"], location=repo)
             if result != 0:
-                print(result)  # Check if the git commit command returned non-zero exit code
-        except subprocess.CalledProcessError as e:
-            print(f"Commit failed with error message: {e.stderr.decode().strip()}")
+                print(f"Commit failed. Output:\n{commit_output}")
+                failed_repo.append(repo)
+        except Exception as e:
+            print(f"An error occurred during commit: {e}")
             failed_repo.append(repo)
-            return
-        # If commit is successful, continue with the git push command
+            continue
+
         try:
-            run("git push origin main",location=repo)
-            # subprocess.run(f"git push origin main", shell=True, cwd=repo, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True)
-            success_repo.append(repo)
-            print(f"Add-commit-push completed. Tag: {current_time}, {tag_message}")
-        except subprocess.CalledProcessError as e:
-            print(f"Push failed with error message: {e.stderr.decode().strip()}")
+            result, push_output = run(["git", "push", "origin", "main"], location=repo)
+            if result == 0:
+                success_repo.append(repo)
+                print(f"Add-commit-push completed. Tag: {current_time}, {tag_message}")
+            else:
+                print(f"Push failed. Output:\n{push_output}")
+                failed_repo.append(repo)
+        except Exception as e:
+            print(f"An error occurred during push: {e}")
             failed_repo.append(repo)
-    print(f"=====================================================================================")
-    print(f"summary: successed repo: {success_repo}")
-    print(f"summary: failed repo: {failed_repo}")
-    print(f"=====================================================================================")
+
+        print(f"=====================================================================================")
+        print(f"Summary: Successful repos: {success_repo}")
+        print(f"Summary: Failed repos: {failed_repo}")
+        print(f"=====================================================================================")
+
 
 def get_files_bigger_than_100mb(folder_path):
     file_list = []

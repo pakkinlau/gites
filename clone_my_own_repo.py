@@ -11,10 +11,10 @@ def clone_repo(remote_url, local_path):
     except subprocess.CalledProcessError as e:
         print(f"Error: Failed to clone the repository '{local_path}'.\n{e}")
 
-root_directory = r"...."
+root_directory = os.path.join(os.path.expanduser("~"), "All_Github_Repos")
 
 list_of_repo = {
-    "Git management": "https://github.com/pakkinlau/your-repo.git",
+    # "Git management": "https://github.com/pakkinlau/your-repo.git", # A repo should not clone itself. 
     "Guides": "https://github.com/pakkinlau/guides.git",
     "Python coding gym": "https://github.com/pakkinlau/python-coding-gym.git",
     "Textual notes": "https://github.com/pakkinlau/textual-notes.git",
