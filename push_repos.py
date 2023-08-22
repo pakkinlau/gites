@@ -12,7 +12,7 @@ def main():
     # get all folders 
     all_items = os.listdir(root_folder)
     repo_list = [os.path.join(".", item) for item in all_items if os.path.isdir(os.path.join(root_folder, item)) and not item.startswith('.')]
-    print(repo_list)
+    print(f"Totally there are {len(repo_list)} repos to work on. They are: {repo_list}")
     # The result would be : ['./Video materials', './Git management', './Textual notes', './Guides', './Tutorial template', './JS webpage coding gym', './Python coding gym', './Git-flow-master']
 
     util.listpush(repo_list)
