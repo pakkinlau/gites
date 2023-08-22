@@ -86,6 +86,7 @@ def listpush(list_of_repo: list, tag_message="Automated add-commit-push"):
         if return_code != 0:
             # Continue: terminate the process for this element, proceed next element in the for-loop
             failed_repo.append(repo)
+            print("Failed. Code: s5ws2w")
             continue
         
         return_code, stdout = run(["git", "status"], location=repo)
@@ -93,16 +94,19 @@ def listpush(list_of_repo: list, tag_message="Automated add-commit-push"):
         # Case 3: Other case 
         if return_code != 0:
             failed_repo.append(repo)
+            print("Failed. Code: 1sd2a")
             continue
         # Case 2: 'Your branch is up to date'
-        if "our branch is up to date" in stdout:
+        if "nothing to commit, working tree clean" in stdout:
             no_effect_repo.append(repo)
+            print("No effect to the repo. Code: 2sd32")
             continue
         
         return_code, _ = run(["git", "add", "--all"], location=repo)
         # `git add` won't tell much from the output.
         if return_code != 0:
             failed_repo.append(repo)
+            print("Failed. Code: a1sd32")
             continue
         
         # Commit: 
@@ -113,11 +117,13 @@ def listpush(list_of_repo: list, tag_message="Automated add-commit-push"):
         # Case 2: Any other case
         if return_code != 0:
             failed_repo.append(repo)
+            print("Failed. Code: 1zsxer2")
             continue
         # Case 3 (Trivial): The staging area is empty (But it is most probably blocked due to the previous `git add` control flow)
         if "nothing to commit" in stdout:
             print("No changes to commit.")
             no_effect_repo.append(repo)
+            print("No effect to the repo. Code: t5gs2")
             continue
         print(f"Commit successful. Output:\n{stdout}")
         
