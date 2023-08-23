@@ -36,8 +36,14 @@ class SubprocessHandler:
             
             # In the current setting, print all outputs from terminal for development purpsoe 
             print("Returned exit code:", return_code)
-            print("Standard Output:", string_stdout)
-            print("Standard Error:", string_stderr)
+            if not string_stdout:
+                print("Standard Output: <--- It is empty!")
+            else:
+                print("Standard Output:", string_stdout)
+            if not string_stderr:
+                print("Standard Error: <--- It is empty!")
+            else:
+                print("Standard Error:", string_stderr)
             
             # Case 2: Successful-zero
             if return_code == 0:
