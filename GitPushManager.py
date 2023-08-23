@@ -74,7 +74,7 @@ class GitPushManager:
             # Git push origin main
             push_command = ["git", "push", "origin", "main"]
             _, push_output = run(push_command, loc=repo)
-            if "Total" in push_output:
+            if "Total" in push_output or not push_output:
                 self.success_repo.append(repo)
                 # Future development: Scrape the terminal output and collect those data to summary variable.
                 print("Push completed")
