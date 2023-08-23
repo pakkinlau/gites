@@ -1,68 +1,73 @@
-import subprocess
 import os
 import time 
+import json
 
-def clone_repo(remote_url, local_path):
-    # status code: 0 = Success, 1 = Fail, 2 = No effect
-    try:
-        # Check if the repository already exists locally
-        if os.path.exists(local_path):
+from SubprocessHandler import run
+
+
+class Timer:
+    def __enter__(self):
+        self.start_time = time.time()
+        return self
+
+    def __exit__(self, *args):
+        self.end_time = time.time()
+        self.time_spent = self.end_time - self.start_time
+
+class RepoCloner:
+    def __init__(self, config_file_path):
+        self.config_file_path = config_file_path
+        self.root_directory = ""
+        self.repositories = []
+        self.success = []
+        self.failed = []
+        self.no_effect = []
+
+    def clone(self):
+        self.load_config()
+        self.clone_repositories()
+        self.print_summary()
+
+    def load_config(self):
+        with open(self.config_file_path, "r") as config_file:
+            config = json.load(config_file)
+        self.root_directory = config["root_directory"]
+        self.repositories = config["repositories"]
+
+    def clone_repo(self, remote_url, local_path):
+        if os.path.exists(local_path) and any(os.listdir(local_path)):
             print(f"Repository '{local_path}' already exists. Skipping cloning.")
             return 2
-
-        # Clone the repository
-        subprocess.run(["git", "clone", remote_url, local_path], check=True)
+        command = ["git", "clone", remote_url, local_path]
+        run(command, check=True)
         print(f"Repository '{local_path}' cloned successfully.")
-
+        
         git_folder_path = os.path.join(local_path, ".git")
-
-        # Check if '.git' folder was cloned successfully
         if not os.path.exists(git_folder_path):
             print(f"Error: '.git' folder was not generated for repository '{local_path}'. Aborting.")
             return 1
-
         return 0
-    except subprocess.CalledProcessError as e:
-        print(f"Error: Failed to clone the repository '{local_path}'.\n{e}")
-        return 1
-    # The following: try to setup the fresh downloaded repos. 
 
+    def clone_repositories(self):
+        for repo_info in self.repositories:
+            repo_name = repo_info["name"]
+            repo_url = repo_info["remote_url"]
+            local_path = os.path.join(self.root_directory, repo_name)
+            status_message = self.clone_repo(repo_url, local_path)
+            if status_message == 0:
+                self.success.append(repo_name)
+            elif status_message == 1:
+                self.failed.append(repo_name)
+            elif status_message == 2:
+                self.no_effect.append(repo_name)
 
-root_directory = os.path.join(os.path.expanduser("~"), "All_Github_Repos")
-
-list_of_repo = {
-    # "Git management": "https://github.com/pakkinlau/your-repo.git", # A repo should not clone itself. 
-    "Guides": "https://github.com/pakkinlau/guides.git",
-    "Textual notes": "https://github.com/pakkinlau/textual-notes.git",
-    "Tutorial template": "https://github.com/pakkinlau/tutorial-template.git",
-    "Video materials": "https://github.com/pakkinlau/video-materials.git",
-    "JS webpage coding gym": "https://github.com/pakkinlau/js-webpage-coding-gym.git",
-    "Python coding gym": "https://github.com/pakkinlau/python-coding-gym.git",
-}
+    def print_summary(self):
+        print("Repositories cloned successfully:", self.success)
+        print("Repositories failed to clone:", self.failed)
+        print("Repositories already existed:", self.no_effect)
 
 if __name__ == "__main__":
-    
-    start_time = time.time()
-
-    success = []
-    failed = []
-    no_effect = []
-    for repo_name, repo_url in list_of_repo.items():
-        local_path = os.path.join(root_directory, repo_name)
-        status_message = clone_repo(repo_url, local_path)
-        if status_message == 0:
-            success.append(repo_name)
-        elif status_message == 1:
-            failed.append(repo_name)
-        elif status_message == 2:  # Changed "else" to "elif"
-            no_effect.append(repo_name)
-    
-    # recording the time spent
-    end_time = time.time()
-    time_spent = end_time - start_time
-    print("Time Spent:", "{:.2f} seconds".format(time_spent))
-
-    # Print the summary
-    print("Repositories cloned successfully:", success)
-    print("Repositories failed to clone:", failed)
-    print("Repositories already existed:", no_effect)
+    with Timer() as timer:
+        cloner = RepoCloner("gpf-config.json")
+        cloner.clone()
+    print("Time Spent:", "{:.2f} seconds".format(timer.time_spent))
