@@ -18,9 +18,6 @@ class GitPushManager:
 
 
     def listpush(self, list_of_repo):
-        success_repo = []
-        failed_repo = []
-        no_effect_repo = []
 
         for repo in list_of_repo:
             print("+" * 72)
@@ -86,14 +83,14 @@ class GitPushManager:
                 self.failed_repo.append(repo)
             print("=" * 72)
 
-            success_repo.append(repo)
+            self.success_repo.append(repo)
             print(f"Add-commit-push completed.")
             print("=" * 72)
             
         print("Summary:")
-        print(f"Successful repos: {success_repo}")
-        print(f"Failed repos: {failed_repo}")
-        print(f"No effect repos: {no_effect_repo}")
+        print(f"Successful repos: {self.success_repo}")
+        print(f"Failed repos: {self.failed_repo}")
+        print(f"No effect repos: {self.no_effect_repo}")
 
 
 # Testing unit: 
