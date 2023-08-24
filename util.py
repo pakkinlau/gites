@@ -1,3 +1,7 @@
+"""
+The followings are legacy functions. No application for now. 
+"""
+
 import os
 import subprocess
 import shutil
@@ -23,12 +27,6 @@ def check_and_copy_pre_commit_hook(repo_location):
     else:
         print("Pre-commit hook already exists.")
 
-
-
-"""
-The followings are legacy functions. No application for now. 
-"""
-
 def get_files_bigger_than_100mb(folder_path):
     file_list = []
 
@@ -50,3 +48,26 @@ def clean_undone_commit():
 def check_ignored_path():
     """Before this, make sure .gitignore file is located in the root directory of the repository."""
     subprocess.run(f"git status --ignored", shell=True)
+
+def print_folder_structure(folder_path, level=0, num_files_to_print=-1):
+    # Get the files and directories in the current directory
+    items = os.listdir(folder_path)
+
+    # Loop through the items in the directory
+    for i, item in enumerate(sorted(items)):
+        # Determine the path of the item
+        item_path = os.path.join(folder_path, item)
+
+        # Print the item with appropriate indentation
+        if os.path.isfile(item_path):
+            if num_files_to_print < 0 or i < num_files_to_print:
+                print(" " * level * 4 + "- " + item)
+            elif i == num_files_to_print:
+                print(" " * level * 4 + "- ...")
+        else:
+            print(" " * level * 4 + "- " + item)
+
+        # Recursively print the contents of subfolders
+        if os.path.isdir(item_path):
+            print_folder_structure(item_path, level + 1, num_files_to_print)
+

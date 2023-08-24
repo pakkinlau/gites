@@ -83,11 +83,9 @@ class GitPushManager:
                 self.failed_repo.append(repo)
             print("=" * 72)
 
-            self.success_repo.append(repo)
-            print(f"Add-commit-push completed.")
-            print("=" * 72)
             
-        print("Summary:")
+        print("|" * 72)
+        print("Add-commit-push completed for all repos in the root folder. Here is the work summary: ")
         print(f"Successful repos: {self.success_repo}")
         print(f"Failed repos: {self.failed_repo}")
         print(f"No effect repos: {self.no_effect_repo}")

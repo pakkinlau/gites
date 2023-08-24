@@ -7,16 +7,24 @@ There should be 2 exact-copies of `pgf-config.json` stored in different location
 """
 
 import os
-import json
-from JSONHandler import JSONHandler
+from JSONHandler import _load_json, _write_json, default_json_path
 
-default_json_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "pgf-config.json")
 
+# A concise interface function to other module:  
+def load_data(json_location):
+    return JSONUpdater(json_location).existing_data
+
+def update_root_into(root_directory, json_location = default_json_path):
+    JSONUpdater(json_location).update_root_directory(root_directory)
+
+def update_repo_info(list_of_repo, json_location = default_json_path):
+    JSONUpdater(json_location).update_repo_info(list_of_repo)
+
+# Complete structure: 
 class JSONUpdater:
-    def __init__(self, script_directory, json_file_path):
-        self.script_directory = script_directory # reserve it for future development
-        self.json_handler = JSONHandler(json_file_path)
-        self.existing_data = self.json_handler.load_data()
+    def __init__(self, json_file_path):
+        self.script_directory = None # reserve it for future development
+        self.existing_data = _load_json(json_file_path)
 
     def update_root_directory(self, root_directory):
         self.existing_data["root_directory"] = root_directory
@@ -49,7 +57,7 @@ class JSONUpdater:
                 self.existing_data["repositories"].append({"name": repo_name, "remote_url": repo_url})
                 created_record.append(repo_name)
 
-        self.json_handler.write_data(self.existing_data)
+        _write_json(self.existing_data)
         self.print_summary(created_record, rewrited_record, unchanged_record)
 
     def print_summary(self, created_record, rewrited_record, unchanged_record):
@@ -73,9 +81,10 @@ if __name__ == "__main__":
     }
 
     # Determine the path to the JSON file in the same directory as the script
-    script_directory = os.path.dirname(os.path.abspath(__file__))
-    json_file_path = os.path.join(script_directory, "pgf-config.json")
+    json_file_path = default_json_path
 
-    json_updater = JSONUpdater(script_directory, json_file_path)
-    json_updater.update_root_directory(root_directory)
-    json_updater.update_repo_info(list_of_repo)
+    # test json writing + updating
+    update_repo_info(list_of_repo)
+
+    # test updating root dir from existing json on that location
+    # update_root_into("....")

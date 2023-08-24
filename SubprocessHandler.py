@@ -2,7 +2,7 @@ import os
 import subprocess
 
 # A concise interface function to other module:  
-def run(cmd: str, loc: str) -> tuple[int, str]:
+def run(cmd: str, loc: str = os.getcwd()) -> tuple[int, str]:
     return_code, stdout = SubprocessHandler(cmd, loc).run()
     return return_code, stdout
 

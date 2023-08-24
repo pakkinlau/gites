@@ -3,17 +3,14 @@ import time
 import json
 
 from SubprocessHandler import run
+from Timing import timing
+
+# A concise interface function to other module:  
+def listclone():
+    RepoCloner("gpf-config.json")
 
 
-class Timer:
-    def __enter__(self):
-        self.start_time = time.time()
-        return self
-
-    def __exit__(self, *args):
-        self.end_time = time.time()
-        self.time_spent = self.end_time - self.start_time
-
+# Complete structure: 
 class RepoCloner:
     def __init__(self, config_file_path):
         self.config_file_path = config_file_path
@@ -23,7 +20,8 @@ class RepoCloner:
         self.failed = []
         self.no_effect = []
 
-    def clone(self):
+    @timing
+    def listclone(self):
         self.load_config()
         self.clone_repositories()
         self.print_summary()
@@ -67,7 +65,5 @@ class RepoCloner:
         print("Repositories already existed:", self.no_effect)
 
 if __name__ == "__main__":
-    with Timer() as timer:
-        cloner = RepoCloner("gpf-config.json")
-        cloner.clone()
-    print("Time Spent:", "{:.2f} seconds".format(timer.time_spent))
+    cloner = RepoCloner("gpf-config.json")
+    cloner.listclone()

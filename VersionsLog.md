@@ -1,3 +1,10 @@
+-> Aug 23, 2023:
+Add: `JSONHandler.py`, `JSONUpdater.py`
+Changes: 
+For details, check https://github.com/pakkinlau/Git-flow-master/compare/61acdee..0d88b8c
+
+`GitPushManager.py`, 
+
 -> Aug 21, 2023:
 Changes: `util.py`, `push_repos.py`, `clone_my_own_repo.py`
 For details, check https://github.com/pakkinlau/Git-flow-master/compare/cf4283d..61acdee
