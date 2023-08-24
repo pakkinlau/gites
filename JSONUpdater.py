@@ -7,8 +7,8 @@ There should be 2 exact-copies of `pgf-config.json` stored in different location
 """
 
 import os
-from JSONHandler import _load_json, _write_json, default_json_path
-
+from _JSONHandler import _load_json, _write_json, default_json_path
+from Timing import timing
 
 # A concise interface function to other module:  
 def load_data(json_location):
@@ -26,6 +26,7 @@ class JSONUpdater:
         self.script_directory = None # reserve it for future development
         self.existing_data = _load_json(json_file_path)
 
+    @timing
     def update_root_directory(self, root_directory):
         self.existing_data["root_directory"] = root_directory
 
@@ -35,6 +36,7 @@ class JSONUpdater:
                 return repo["remote_url"]
         return None
 
+    @timing
     def update_repo_info(self, list_of_repo):
         existing_repo_names = {repo["name"] for repo in self.existing_data["repositories"]}
         created_record = []
