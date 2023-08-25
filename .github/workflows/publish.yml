@@ -20,12 +20,14 @@ jobs:
       - name: Install Dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt  # Replace with your requirements installation command 
+          pip install -r requirements.txt
+          pip install wheel
+
         # No requirements!
       - name: Build and Publish
         run: |
           python setup.py sdist bdist_wheel
-          python -m twine upload dist/*  # This uploads your package to PyPI using twine
+          python -m twine upload dist/*
         env:
           TWINE_USERNAME: pakkin.lau.-_0  # Replace with your PyPI username or token
           TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}  # No need to change here! Edit it in github website.
