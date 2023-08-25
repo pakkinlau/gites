@@ -32,5 +32,5 @@ jobs:
           python setup.py sdist bdist_wheel
           python -m twine upload dist/*
         env:
-          TWINE_USERNAME: pakkin.lau.-_0  # Replace with your PyPI username or token
+          TWINE_USERNAME: __token__  
           TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}  # No need to change here! Edit it in github website.
