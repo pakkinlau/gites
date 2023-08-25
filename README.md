@@ -1,4 +1,7 @@
-# Package: AutoGit
+# Package: gites
+
+![Alt text](images/gites.png)
+Image: The photos of "gites".
 
 While I am personally use github as a cloud drive to sync and maintain a lot of personal repos. I found the process of typing git command everyday is very repetitive. And such workflow should be streamlined into a single click. 
 
@@ -171,6 +174,8 @@ agit init
 ## Future development
 
 1. Consider varying needs from the diversity of potential users. Adding / editing the package to provide more methods.
+Such as: 
+- Renaming a repo. `RenameManager()`
 
 2. Documentation: Use sphinx and readthedoc to produce an effective documentation to the user. Highlight, screenshot the features of the package as an image, or a video.
 
