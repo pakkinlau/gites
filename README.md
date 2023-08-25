@@ -70,19 +70,78 @@ Compare with `vscode source control`:
 >>
 
 
-# The journey of auto-packing your repository
+## The journey of auto-packing your repository
 
+### Step 1 (optional): Setup the default location of the `pgf-config.json` file
+- `pgf-config.json` would keep up all the records required to execute the gitflow commands. If you put it inside this package, as you upgrade the package, your data would lose. 
+- You should locate this datastore file on another repo folder. So the datastore file would also included in the sync process. 
+- If you don't do this step, the `pgf-config.json` will be located in `home/pgf-package/pgf-config.json`
 
-Please note that while the table provides a general comparison, it's important to keep in mind that the `gitpython` library is a specialized tool for version control and interacting with Git repositories. It's a mature and widely-used library that's well-suited for managing code repositories. Your custom package seems to be designed for a specific use case involving JSON files and version control, which may not offer the same level of features as a dedicated version control library like `gitpython`. Depending on your project's needs, either option could be appropriate.
+### Step 2a (necessary): Specify the root folder location
+- All the progress will be done around the root folder. This information will be stored in the json.
+- You might do it this way: 
 
+```python
+abc.update_root_into('.....')
+```
 
+### Step 2b (optional): Initialize the `pgf-config.json` file
+- When cloning, you need to provide both the folder name, and the remote repo link for each repo.
+- If you don't do that, the package will create an empty package for you in other actions if it cannot find the json in that location.
+- If that is your first time using this package, you should follow these step to update your datastore json:
 
-## Key Feature
+```python
+# Testing unit: 
+if __name__ == "__main__":
+    
+    root_directory = os.path.join(os.path.expanduser("~"), "All_Github_Repos")
+    list_of_repo = {
+        # "Git management": "https://github.com/pakkinlau/your-repo.git", # A repo should not clone itself. 
+        "Guides": "https://github.com/pakkinlau/guides.git",
+        "Textual notes": "https://github.com/pakkinlau/textual-notes.git",
+        "Tutorial template": "https://github.com/pakkinlau/tutorial-template.git",
+        "Video materials": "https://github.com/pakkinlau/video-materials.git",
+        "JS webpage coding gym": "https://github.com/pakkinlau/js-webpage-coding-gym.git",
+        "Python coding gym": "https://github.com/pakkinlau/python-coding-gym.git",
+    }
 
-One of the main highlights of this repository is the implementation of a pre-commit hook that prevents files larger than 100MB from being added, committed, and pushed into your Git repositories. This feature is designed to maintain a clean repository history and streamline the "add, commit, push" workflow, ensuring an efficient version control process.
+    # Determine the path to the JSON file in the same directory as the script
+    json_file_path = default_json_path
 
+    # test json writing + updating
+    update_repo_info(list_of_repo)
+```
 
-### Usage
+And the resulting json datastore would be like this:
+```json
+{
+    "repositories": [
+        {
+            "name": "Guides",
+            "remote_url": "https://github.com/pakkinlau/guides.git"
+        },
+        {
+            "name": "Textual notes",
+            "remote_url": "https://github.com/pakkinlau/textual-notes.git"
+        },
+    ],
+    "root_directory": "/home/kin/All_Github_Repos"
+}
+```
+
+### Step 3 (optional): Bulk clone all repos from remote
+- With the datastore json, you can start clone all of your repos from remote. 
+- After processing, a summary of updated/no-effect/failed repos list will be displayed.
+
+### Step 4 (optional): Bulk fetch-pull all of your repos
+- This function is still working in progress.
+- With that, you can look at the updates of all repos in one-clik.
+- After processing, a summary of updated/no-effect/failed repos list will be displayed.
+
+### Step 5 (optional): Bulk push all of your repos
+- The package would search all the repos in the root folder that you have specified. And try to execute commit-push for each repos.
+
+## Terminal operations: 
 
 - Installation of the package
 ```bash
@@ -91,22 +150,27 @@ pip install autogit
 
 - Ensuring your terminal has already logged in your github account:
 ```bash
-abc
+git abcdefg
 ```
 
+- Bulk push for all repos in the root folder you specified location: 
+```bash
+abc bulk push
+```
 
-- Setup the 
+- Setup the `pgf-config.json` within terminal:
 ```bash
 agit init
 ```
+
 
 ## Future development
 
 1. Consider varying needs from the diversity of potential users. Adding / editing the package to provide more methods.
 
-2. Documentation: Use sphinx and readthedoc to produce an effective documentation to the user. 
+2. Documentation: Use sphinx and readthedoc to produce an effective documentation to the user. Highlight, screenshot the features of the package as an image, or a video.
 
-
+3. Improves the work summary message output from the package. 
 
 ## Contributing
 
