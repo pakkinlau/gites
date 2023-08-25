@@ -26,7 +26,7 @@ jobs:
       - name: Install twine
         run: pip install twine
 
-        # No requirements!
+        # No requirements!  
       - name: Build and Publish
         run: |
           python setup.py sdist bdist_wheel
