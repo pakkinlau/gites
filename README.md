@@ -52,10 +52,10 @@ Compare with `vscode source control`:
 - JSON data store: 
     - Memorize what are the repos that you owns and their remote link. You are save it in a particular location and clone all your repos all at once with that JSON as a memory. 
 >>
-- Autoclone: 
+- Bulkclone: 
     - Users could clone a list of repos from their json file, which mimic the download actions of using a cloud storage
 >>
-- Auto-fetch/pull:
+- Bulkfetch/pull:
     - We will build it later. 
 >>
 - Auto-large-file-management: 
@@ -64,7 +64,7 @@ Compare with `vscode source control`:
 - Auto-large-file-packing-and-push: 
     - If there are large files, our package also included a functionality that providing hooks to all repos. Implementing the pre-commit hook to prevent files larger than 100MB from being committed. This feature ensures that large and unnecessary files do not clutter your repository and slow down your Git workflow.
 >>
-- Auto-push: 
+- Bulk-push: 
     - Once you have specified the root folder, that root folder can be considered as your own google drive. You can just sync all the changes with ease, by one click. 
 >>
 
