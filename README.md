@@ -1,4 +1,58 @@
-# Package: Git-flow-master 
+# Package: AutoGit
+
+While I am personally use github as a cloud drive to sync and maintain a lot of personal repos. I found the process of typing git command everyday is very repetitive. And such workflow should be streamlined into a single click. 
+
+This package tries to save your time on synchronzing the packages that you own. The goal of this package is to mimic the user experience of using a google drive or one drive. 
+
+## Solution comparison: 
+
+A comparison of the functionality between two packages:
+
+| Feature / Capability            | Your Custom Package       | gitpython Library         |
+|---------------------------------|---------------------------|---------------------------|
+| Manage JSON file                | ✔️ Custom JSON handling   | ❌ JSON handling only     |
+| Create Git repositories         | ✔️                        | ✔️                        |
+| Commit changes                  | ✔️                        | ✔️                        |
+| Push changes to remote          | ✔️                        | ✔️                        |
+| Pull changes from remote        | ❌ (Not mentioned)        | ✔️                        |
+| Sync with one click             | ✔️ Custom implementation  | ❌ (Not mentioned)        |
+| Subprocess management           | ✔️                        | ❌                        |
+| Pre-commit hooks                | ✔️ Custom implementation  | ❌                        |
+| Custom timing functionality     | ✔️                        | ❌                        |
+| Comprehensive error handling    | ✔️                        | ✔️                        |
+| JSON configuration options      | ✔️ Custom implementation  | ❌                        |
+| Flexibility for expansion       | ✔️                        | ✔️                        |
+| Popularity and community support| ❌ (Not mentioned)        | ✔️ Well-established       |
+|                                 |
+
+
+## Functionalities: 
+
+- JSON data store: 
+    - Memorize what are the repos that you owns and their remote link. You are save it in a particular location and clone all your repos all at once with that JSON as a memory. 
+
+- Autoclone: 
+    - Users could clone a list of repos from their json file, which mimic the download actions of using a cloud storage
+
+- Auto-pull:
+
+- Auto-large-file-management: 
+    - Very often, we might incidently include large size file in our commit, it would stucks the commit-push process. and The package would provide a set of hooks on each of your repos, which provide versatile ability of handling file size error. If there is any large size file detected, that file would be shown in the summary window.
+
+- Auto-large-file-packing-and-push: 
+    - If there are large files, our package also included a functionality that could streamline the process of "compressing large file and then pack it up into N pieces smaller than 100MB. Which mimics the git-hub large file system.
+
+- Auto-push: 
+    - Once you have specified the root folder, that root folder can be considered as your own google drive. You can just sync all the changes with ease, by one click. 
+
+
+
+# The journey of auto-packing your repository
+
+While 
+
+Please note that while the table provides a general comparison, it's important to keep in mind that the `gitpython` library is a specialized tool for version control and interacting with Git repositories. It's a mature and widely-used library that's well-suited for managing code repositories. Your custom package seems to be designed for a specific use case involving JSON files and version control, which may not offer the same level of features as a dedicated version control library like `gitpython`. Depending on your project's needs, either option could be appropriate.
+
 
 Welcome to the **Git flow master** repository! This repository is a versatile package containing multiple useful functions and tools designed to enhance your Git workflow and repository management. It provides a collection of Python scripts with various functionalities to make version control easier and more efficient.
 
@@ -26,11 +80,19 @@ This repository contains the following Python scripts, each serving a specific p
 
 ### Usage
 
-To use any of the scripts in this package, simply run them using Python. For example, to check file sizes, run `check_file_size.py`:
-
+- Installation of the package
 ```bash
-python check_file_size.py
+pip install autogit
 ```
+
+
+
+- Setup the 
+```bash
+agit init
+```
+
+
 
 Ensure that you have the necessary permissions and dependencies installed to execute the scripts successfully.
 

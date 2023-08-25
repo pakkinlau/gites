@@ -71,3 +71,7 @@ def print_folder_structure(folder_path, level=0, num_files_to_print=-1):
         if os.path.isdir(item_path):
             print_folder_structure(item_path, level + 1, num_files_to_print)
 
+### example usage
+if __name__ == "__main__":
+    print_folder_structure(os.getcwd())
+
