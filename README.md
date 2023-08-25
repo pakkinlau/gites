@@ -176,6 +176,7 @@ agit init
 1. Consider varying needs from the diversity of potential users. Adding / editing the package to provide more methods.
 Such as: 
 - Renaming a repo. `RenameManager()`
+- Hard resolve conflicts for a repo (one-side overwrite): When remote and local is not consistent. Delete either one and then overwrite. 
 
 2. Documentation: Use sphinx and readthedoc to produce an effective documentation to the user. Highlight, screenshot the features of the package as an image, or a video.
 
