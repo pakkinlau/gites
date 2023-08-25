@@ -151,7 +151,7 @@ The successful push will give you back this summary message:
 
 - Installation of the package
 ```bash
-pip install autogit
+pip install gites
 ```
 
 - Ensuring your terminal has already logged in your github account:
