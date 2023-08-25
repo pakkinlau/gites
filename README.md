@@ -27,7 +27,6 @@ Compare with `gitpython`:
 
 Compare with `vscode source control`:
 
-(We will add real-time update, progress tracking bar to the package in the future)
 
 | Feature             | Your Package         | VS Code Source Control |
 |---------------------|----------------------|------------------------|
@@ -46,7 +45,7 @@ Compare with `vscode source control`:
 | Collaboration       | ❌                      | ✔️                      |
 | Performance         | Depends on Implem.   | ✔️                      |
 
-
+(Note: We will add real-time update, progress tracking bar to the package in the future to make the package to be more competitive)
 
 ## Functionalities of the package: 
 
