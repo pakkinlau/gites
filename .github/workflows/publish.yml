@@ -23,6 +23,9 @@ jobs:
           pip install -r requirements.txt
           pip install wheel
 
+      - name: Install twine
+        run: pip install twine
+
         # No requirements!
       - name: Build and Publish
         run: |
