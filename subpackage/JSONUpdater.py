@@ -8,7 +8,7 @@ There should be 2 exact-copies of `pgf-config.json` stored in different location
 
 import os
 from _JSONHandler import _load_json, _write_json, default_json_path
-from Timing import timing
+from _Timing import timing
 
 # A concise interface function to other module:  
 def load_data(json_location):

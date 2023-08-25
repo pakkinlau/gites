@@ -7,7 +7,7 @@ import subprocess
 import shutil
 import datetime
 
-from SubprocessHandler import run
+from _SubprocessHandler import run
 
 
 # This should be used in more than 1 module.... Check it. 
@@ -49,16 +49,21 @@ def check_ignored_path():
     """Before this, make sure .gitignore file is located in the root directory of the repository."""
     subprocess.run(f"git status --ignored", shell=True)
 
-def print_folder_structure(folder_path, level=0, num_files_to_print=-1):
+def print_folder_structure(folder_path, level=0, num_files_to_print=-1, max_depth=float('inf'), current_depth=0, ignore_dot_folders=True):
+    # Default depth: infinite
+    if current_depth > max_depth:
+        return
+
     # Get the files and directories in the current directory
     items = os.listdir(folder_path)
 
     # Loop through the items in the directory
     for i, item in enumerate(sorted(items)):
-        # Determine the path of the item
+        if ignore_dot_folders and item.startswith('.'):
+            continue
+        
         item_path = os.path.join(folder_path, item)
 
-        # Print the item with appropriate indentation
         if os.path.isfile(item_path):
             if num_files_to_print < 0 or i < num_files_to_print:
                 print(" " * level * 4 + "- " + item)
@@ -69,9 +74,8 @@ def print_folder_structure(folder_path, level=0, num_files_to_print=-1):
 
         # Recursively print the contents of subfolders
         if os.path.isdir(item_path):
-            print_folder_structure(item_path, level + 1, num_files_to_print)
+            print_folder_structure(item_path, level + 1, num_files_to_print, max_depth, current_depth + 1, ignore_dot_folders)
 
-### example usage
+
 if __name__ == "__main__":
-    print_folder_structure(os.getcwd())
-
+    print_folder_structure(os.getcwd(), max_depth=2,ignore_dot_folders=True)

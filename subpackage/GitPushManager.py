@@ -1,10 +1,10 @@
 import os
-from SubprocessHandler import run
+from _SubprocessHandler import run
 import datetime
 
 
 # A concise interface function to other module:  
-def listpush(list_of_repo):
+def bulkpush(list_of_repo):
     return GitPushManager.listpush(list_of_repo)
 
 # Complete structure: 

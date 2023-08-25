@@ -2,11 +2,11 @@ import os
 import time 
 import json
 
-from SubprocessHandler import run
-from Timing import timing
+from _SubprocessHandler import run
+from _Timing import timing
 
 # A concise interface function to other module:  
-def listclone():
+def bulkclone():
     RepoCloner("gpf-config.json")
 
 
