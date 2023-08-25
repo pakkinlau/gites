@@ -1,4 +1,4 @@
-# Package: AutoGit (Package name is not decided yet)
+# Package: gites
 
 While I am personally use github as a cloud drive to sync and maintain a lot of personal repos. I found the process of typing git command everyday is very repetitive. And such workflow should be streamlined into a single click. 
 
