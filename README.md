@@ -11,7 +11,7 @@ The goal of this package is to mimic the user experience of using a google drive
 
 Compare with `gitpython`:
 
-| Feature / Capability            | Your Custom Package       | gitpython Library         |
+| Feature / Capability            | This Package              | gitpython Library         |
 |---------------------------------|---------------------------|---------------------------|
 | Manage JSON file                | ✔️ Custom JSON handling   | ❌ JSON handling only     |
 | Create Git repositories         | ✔️                        | ✔️                        |
@@ -31,7 +31,7 @@ Compare with `gitpython`:
 Compare with `vscode source control`:
 
 
-| Feature             | Your Package         | VS Code Source Control |
+| Feature             | This Package         | VS Code Source Control |
 |---------------------|----------------------|------------------------|
 | JSON Management     | ✔️                    | ❌                      |
 | One-Click Sync      | ✔️                    | ✔️                      |
@@ -74,10 +74,10 @@ Compare with `vscode source control`:
 
 ## The journey of auto-packing your repository
 
-### Step 1 (optional): Setup the default location of the `pgf-config.json` file
-- `pgf-config.json` would keep up all the records required to execute the gitflow commands. If you put it inside this package, as you upgrade the package, your data would lose. 
+### Step 1 (optional): Setup the default location of the `gites-config.json` file
+- `gites-config.json` would keep up all the records required to execute the gitflow commands. If you put it inside this package, as you upgrade the package, your data would lose. 
 - You should locate this datastore file on another repo folder. So the datastore file would also included in the sync process. 
-- If you don't do this step, the `pgf-config.json` will be located in `home/pgf-package/pgf-config.json`
+- If you don't do this step, the `gites-config.json` will be located in `home/pgf-package/gites-config.json`
 
 ### Step 2a (necessary): Specify the root folder location
 - All the progress will be done around the root folder. This information will be stored in the json.
@@ -87,7 +87,7 @@ Compare with `vscode source control`:
 abc.update_root_into('.....')
 ```
 
-### Step 2b (optional): Initialize the `pgf-config.json` file
+### Step 2b (optional): Initialize the `gites-config.json` file
 - When cloning, you need to provide both the folder name, and the remote repo link for each repo.
 - If you don't do that, the package will create an empty package for you in other actions if it cannot find the json in that location.
 - If that is your first time using this package, you should follow these step to update your datastore json:
@@ -164,7 +164,7 @@ git abcdefg
 abc bulk push
 ```
 
-- Setup the `pgf-config.json` within terminal:
+- Setup the `gites-config.json` within terminal:
 ```bash
 agit init
 ```
