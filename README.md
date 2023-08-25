@@ -141,6 +141,10 @@ And the resulting json datastore would be like this:
 ### Step 5 (optional): Bulk push all of your repos
 - The package would search all the repos in the root folder that you have specified. And try to execute commit-push for each repos.
 
+The successful push will give you back this summary message:
+![Alt text](images/image.png)
+
+
 ## Terminal operations: 
 
 - Installation of the package
