@@ -3,10 +3,6 @@ import util
 from _SubprocessHandler import _SubprocessHandler
 from DatastoreJSONHandler import DatastoreJSONHandler
 
-# A concise interface function to other module:  
-def initialize_repo(json_name, repo_folder_name, repo_url):
-    CreateRepoManager(json_name, repo_folder_name, repo_url).initialize_repo()
-
 
 # Complete structure: 
 class CreateRepoManager:
@@ -18,11 +14,14 @@ class CreateRepoManager:
         self.new_created_repo_url = new_created_repo_url
 
     def run(self, cmd):
-        _SubprocessHandler.run(cmd)
+        _SubprocessHandler().run(cmd)
 
-    def check_remote_origin(self, repo_url):
-        _, result_stdout = self.run(['git', 'remote', '-v'])
-        return repo_url in result_stdout
+    def check_remote_origin(self):
+        result = self.run(['git', 'remote', '-v'])
+        if result is not None:
+            _, result_stdout = result
+            return repo_url in result_stdout
+        return False
 
     def initialize_repo(self):
         
@@ -30,10 +29,11 @@ class CreateRepoManager:
         datastore_json_data = self.datastore_json_handler.data
         root_folder = datastore_json_data["root_directory"]
         full_folder_location = os.path.join(root_folder, self.new_created_repo_folder_name)
-        # Future: add the logic that "if the folder is not exist" in `os` module.
 
-        cmd = ['cd', full_folder_location]
-        self.run(cmd)
+        # Go to that folder. If it is not existed, create it. 
+        if not os.path.exists(full_folder_location):
+            os.makedirs(full_folder_location)
+        os.chdir(full_folder_location)
         
         git_folder = os.path.join(full_folder_location, ".git")
         if os.path.exists(git_folder):
@@ -42,7 +42,6 @@ class CreateRepoManager:
             self.run(cmd)
 
         commands_set_1 = [
-            ['echo', 'initial document', '>>', 'firstfile.txt'],
             ['git', 'init'],
         ]
         commands_set_2 = [
@@ -55,6 +54,14 @@ class CreateRepoManager:
             ['git', 'push', '-u', 'origin', 'main'],
         ]
 
+        # create readme.md
+        file_path = 'readme.md'
+        if not os.path.exists(file_path):
+            with open(file_path, 'w') as f:
+                f.write('initial document\n')
+        else:
+            print("File 'readme.md' already exists, skipping creation.")
+
         for cmd in commands_set_1:
             self.run(cmd)
 
@@ -63,24 +70,22 @@ class CreateRepoManager:
         for cmd in commands_set_2:
             self.run(cmd)
 
-        if self.check_remote_origin(self.repo_url):
-            self.run(['git', 'remote', 'set-url', 'origin', self.repo_url])
+        list_of_remote_url = self.check_remote_origin()
+
+        if list_of_remote_url:
+            self.run(['git', 'remote', 'set-url', 'origin', list_of_remote_url])
         else:
-            self.run(['git', 'remote', 'add', 'origin', self.repo_url])
+            self.run(['git', 'remote', 'add', 'origin', repo_url])
+
 
         for cmd in commands_set_3:
             self.run(cmd)
 
 if __name__ == "__main__":
     # initialize it: 
-    create_repo_manager = CreateRepoManager()
-    
-    
-    datastore_json_name =  create_repo_manager.datastore_json_handler.gites_datastore_json_location
-    
-    # future development: make it as input() field to let the user just copy things here. 
-    repo_folder_name = "Notes field" # Synthesis the full path with the "root_directory" value in the datastore json.
-    repo_url = "https://github.com/pakkinlau/BigdataMath.git"
 
-    repo_manager = CreateRepoManager(repo_folder_name, repo_url)
-    repo_manager.initialize_repo()
+    # future development: make it as input() field to let the user just copy things here. 
+    repo_folder_name = "Factual Value Asset" # Synthesis the full path with the "root_directory" value in the datastore json.
+    repo_url = "https://github.com/pakkinlau/Factual-Value-Asset.git"
+
+    create_repo_manager = CreateRepoManager(repo_folder_name, repo_url).initialize_repo()
