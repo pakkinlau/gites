@@ -80,7 +80,8 @@ if __name__ == "__main__":
         "Video materials": "https://github.com/pakkinlau/video-materials.git",
         "JS webpage coding gym": "https://github.com/pakkinlau/js-webpage-coding-gym.git",
         "Python coding gym": "https://github.com/pakkinlau/python-coding-gym.git",
-        "BigdataMath": "https://github.com/pakkinlau/BigdataMath"
+        "BigdataMath": "https://github.com/pakkinlau/BigdataMath",
+        "Notes field": "https://github.com/pakkinlau/Notes-field.git"
     }
 
     # Determine the path to the JSON file in the same directory as the script

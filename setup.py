@@ -9,8 +9,16 @@ setup(
     author='Pak Kin LAU',
     author_email='kinlau529@gmail.com',
     url='https://github.com/pakkinlau/gites',
-    packages=find_packages(),
+    packages=["."],  
+    # Include all packages under the current directory 
+    # before: find_packages(),
     install_requires=[],
+    entry_points={
+        "console_scripts": [
+            "gites=my_package.cli:main_bulkpush",
+            "gites=my_package.cli:main_bulkpull"
+        ]# we define multiple entry points like this here. 
+    },
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',

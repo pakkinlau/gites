@@ -2,17 +2,19 @@ import os
 import util
 from _SubprocessHandler import run
 from JSONUpdater import load_data
+from _JSONHandler import get_default_userdata_path
 
 # A concise interface function to other module:  
-def initialize_repo(repo_url, full_folder_location):
-    CreateRepoManager(repo_url, full_folder_location).initialize_repo()
+def initialize_repo(json_name, repo_folder_name, repo_url):
+    CreateRepoManager(json_name, repo_folder_name, repo_url).initialize_repo()
 
 
 # Complete structure: 
 class CreateRepoManager:
-    def __init__(self, repo_url, full_folder_location):
+    def __init__(self, json_name, repo_folder_name, repo_url):
+        self.json_name = json_name
+        self.repo_folder_name = repo_folder_name
         self.repo_url = repo_url
-        self.full_folder_location = full_folder_location
 
     def run_command(self, cmd):
         run(cmd)
@@ -22,10 +24,15 @@ class CreateRepoManager:
         return repo_url in result_stdout
 
     def initialize_repo(self):
-        cmd = ['cd', self.full_folder_location]
+        # Synthesize the path
+        json_existing_data = get_default_userdata_path(self.json_name)
+        root_folder = json_existing_data["root_directory"]
+        full_folder_location = os.path.join(root_folder, self.repo_folder_name)
+
+        cmd = ['cd', full_folder_location]
         self.run_command(cmd)
         
-        git_folder = os.path.join(self.full_folder_location, ".git")
+        git_folder = os.path.join(full_folder_location, ".git")
         if os.path.exists(git_folder):
             print(f"Deleting existing .git folder at {git_folder}")
             cmd = ['rm', '-rf', git_folder]
@@ -48,7 +55,7 @@ class CreateRepoManager:
         for cmd in commands_set_1:
             self.run_command(cmd)
 
-        util.check_and_copy_pre_commit_hook(self.full_folder_location)
+        util.check_and_copy_pre_commit_hook(full_folder_location)
 
         for cmd in commands_set_2:
             self.run_command(cmd)
@@ -62,13 +69,10 @@ class CreateRepoManager:
             self.run_command(cmd)
 
 if __name__ == "__main__":
-    # A variable that requires manual input
+    # Variables that require manual input
+    json_name =  # this vakue is provided in another function in Datastore.... class. 
+    repo_folder_name = "Notes field" # Synthesis the full path with the "root_directory" value in the datastore json.
     repo_url = "https://github.com/pakkinlau/BigdataMath.git"
-    
-    root_folder = 1 # I need to resolve "how the script recognize the default json path"
-    repo_folder_name = 2
-    
-    full_folder_location = "root folder" + "repo folder name"
 
-    repo_manager = CreateRepoManager(repo_url, full_folder_location)
+    repo_manager = CreateRepoManager(json_name, repo_folder_name, repo_url)
     repo_manager.initialize_repo()
