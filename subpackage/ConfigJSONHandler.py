@@ -3,32 +3,9 @@ import json
 
 # interface functions
 
-# Reading datastore json, V
-def read_config_json()-> dict:
-    datastore_address = DatastoreLocationChecker().datastore_json
-    return datastore_address
-
-# Reading datastore json
-def get_full_path_of_datastore_json()-> str:
-    location = get_directory_of_datastore_json
-    name = get_name_of_datastore_json()
-    full_path = os.path.join(location, name)
-    return full_path
-
-
-# Reading config json
-def get_name_of_datastore_json()-> str:
-    config_json = read_config_json()
-    name = config_json["default_json_name"]
-    return name
-
-def get_directory_of_datastore_json()-> str:
-    config_json = read_config_json()
-    gites_datastore_json_location = config_json["gites_datastore_json_location"]
-    return gites_datastore_json_location
-
 
 # A good class should store its resources in its attribute, not getting them every time in the running process. 
+# That's very good to "keep things into record, as an attribute. " Especially for the process that could be completed immediately. 
 # This class should not depend on other classes / functioos 
 class ConfigJSONHandler:
 
@@ -38,7 +15,8 @@ class ConfigJSONHandler:
         self.config_data = self.load_config()
         self.json_initial_setup_check = self.config_data["initial_setup"]
         self.default_datastore_json_name = self.config_data["default_datastore_json_name"]
-        self.gites_datastore_json_location = self.check_initial_setup_then_get_datastore_json_address()
+        self.root_dir_of_gites_datastore_json = self.check_initial_setup_then_get_datastore_json_address()
+        self.gites_datastore_json_location = os.path.join(self.root_dir_of_gites_datastore_json, self.default_datastore_json_name)
 
     def load_config(self):
         if os.path.exists(self.config_json_path):

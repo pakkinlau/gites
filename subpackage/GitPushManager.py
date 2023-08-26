@@ -1,7 +1,7 @@
 import os
 from _SubprocessHandler import run
 import datetime
-
+from DatastoreJSONHandler import DatastoreJSONHandler
 
 # A concise interface function to other module:  
 def bulkpush(list_of_repo):
@@ -10,10 +10,17 @@ def bulkpush(list_of_repo):
 # Complete structure: 
 class GitPushManager:
     def __init__(self, root_folder):
-        self.root_folder = root_folder
+        # granting all informations: 
+        self.datastore_json_handler = DatastoreJSONHandler()
+        
+        self.root_folder = self.datastore_json_handler.root_dir
+        
+        # for statistics and summary: 
         self.success_repo = []
         self.failed_repo = []
         self.no_effect_repo = []
+        
+        # go to root folder before list pushing. 
         os.chdir(self.root_folder)
 
 
