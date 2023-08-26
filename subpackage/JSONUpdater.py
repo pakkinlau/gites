@@ -11,7 +11,7 @@ from _JSONHandler import _load_json, _write_json, default_json_path
 from _Timing import timing
 
 # A concise interface function to other module:  
-def load_data(json_location):
+def load_data(json_location=default_json_path):
     return JSONUpdater(json_location).existing_data
 
 def update_root_into(root_directory, json_location = default_json_path):
@@ -80,6 +80,7 @@ if __name__ == "__main__":
         "Video materials": "https://github.com/pakkinlau/video-materials.git",
         "JS webpage coding gym": "https://github.com/pakkinlau/js-webpage-coding-gym.git",
         "Python coding gym": "https://github.com/pakkinlau/python-coding-gym.git",
+        "BigdataMath": "https://github.com/pakkinlau/BigdataMath"
     }
 
     # Determine the path to the JSON file in the same directory as the script

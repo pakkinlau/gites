@@ -1,6 +1,7 @@
 import os
 import util
 from _SubprocessHandler import run
+from JSONUpdater import load_data
 
 # A concise interface function to other module:  
 def initialize_repo(repo_url, full_folder_location):
@@ -62,8 +63,12 @@ class CreateRepoManager:
 
 if __name__ == "__main__":
     # A variable that requires manual input
-    repo_url = "https://github.com/pakkinlau/Textual-notes.git"
-    full_folder_location = r"D:\All_programming_projects\Textual notes"
+    repo_url = "https://github.com/pakkinlau/BigdataMath.git"
+    
+    root_folder = 1 # I need to resolve "how the script recognize the default json path"
+    repo_folder_name = 2
+    
+    full_folder_location = "root folder" + "repo folder name"
 
     repo_manager = CreateRepoManager(repo_url, full_folder_location)
     repo_manager.initialize_repo()
