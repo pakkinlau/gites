@@ -10,8 +10,8 @@ the user can use them in their terminal to trigger those functionalities.
 """
 
 
-from subpackage.ConfigJSONHandler import ConfigJSONHandler
-from subpackage.GitPushManager import GitPushManager
+from .subpackage.ConfigJSONHandler import ConfigJSONHandler
+from .subpackage.GitPushManager import GitPushManager
 
 import argparse
 
