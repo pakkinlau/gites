@@ -24,6 +24,22 @@ def cli_lpush():
     args = parser.parse_args()
     GitPushManager().lpush() 
 
+"""
+make sure we collect all terminal cli into one function. Because the listener file would 
+be located at ./bin/gites.
+"""
+
+# The content of that file would be like:
+"""
+#!/home/kin/anaconda3/bin/python
+# -*- coding: utf-8 -*-
+import re
+import sys
+from gites.cli import cli_lpush
+if __name__ == '__main__':
+    sys.argv[0] = re.sub(r'(-script\.pyw|\.exe)?$', '', sys.argv[0])
+    sys.exit(cli_lpush())
+"""
 def main():
     parser = argparse.ArgumentParser(description='Command-line interface for gites package')
     subparsers = parser.add_subparsers(dest='command', help='Available commands')
