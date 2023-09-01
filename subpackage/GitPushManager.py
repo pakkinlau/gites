@@ -9,11 +9,13 @@ def bulkpush(list_of_repo):
 
 # Complete structure: 
 class GitPushManager:
-    def __init__(self, root_folder):
+    def __init__(self):
         # granting all informations: 
         self.datastore_json_handler = DatastoreJSONHandler()
-        
         self.root_folder = self.datastore_json_handler.root_dir
+        
+        all_items = os.listdir(self.root_folder)
+        self.repo_list  = [os.path.join(".", item) for item in all_items if os.path.isdir(os.path.join(self.root_folder, item)) and not item.startswith('.')]
         
         # for statistics and summary: 
         self.success_repo = []
@@ -24,9 +26,12 @@ class GitPushManager:
         os.chdir(self.root_folder)
 
 
-    def listpush(self, list_of_repo):
+    def lpush(self):
 
-        for repo in list_of_repo:
+        print(f"Totally there are {len(self.repo_list)} repos to work on. They are: {self.repo_list}")
+        os.chdir(self.root_folder)
+
+        for repo in self.repo_list:
             print("+" * 72)
             print(f"Current working directory: {os.getcwd()}")
             print(f"Working on repository: {repo}")
@@ -97,19 +102,7 @@ class GitPushManager:
         print(f"Failed repos (Totally {len(self.failed_repo)}): {self.failed_repo}")
         print(f"No effect repos (Totally {len(self.no_effect_repo)}): {self.no_effect_repo}")
 
-
 # Testing unit: 
 if __name__ == "__main__":
-    # locate to the root folder 
-    root_folder = os.path.join(os.path.expanduser("~"), "All_Github_Repos")
-    os.chdir(root_folder)
-
-    # get all folders 
-    all_items = os.listdir(root_folder)
-    repo_list = [os.path.join(".", item) for item in all_items if os.path.isdir(os.path.join(root_folder, item)) and not item.startswith('.')]
-    print(f"Totally there are {len(repo_list)} repos to work on. They are: {repo_list}")
-    # The result would be : ['./Video materials', './Git management', './Textual notes', './Guides', './Tutorial template', './JS webpage coding gym', './Python coding gym', './Git-flow-master']
-
-    GitPushManager(root_folder).listpush(repo_list)
-
+    GitPushManager().lpush()
 
