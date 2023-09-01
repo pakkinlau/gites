@@ -1,5 +1,5 @@
 {
-    "initial_setup": false,
-    "gites_datastore_json_location": "/home/kin/All_Github_Repos/Factual Value Asset/",
+    "initial_setup": true,
+    "gites_datastore_json_location": "",
     "default_datastore_json_name": "my_gites.json"
 }

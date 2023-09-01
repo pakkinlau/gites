@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='gites',
-    version='0.1.0',
+    version='0.1.1',
     description='gites is the home of all developers. It provides bulk clone, bulk push, bulk pull etc. Contact me with my discord ID: pakkin.lau',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
@@ -10,13 +10,12 @@ setup(
     author_email='kinlau529@gmail.com',
     url='https://github.com/pakkinlau/gites',
     packages=["."],  
-    # Include all packages under the current directory 
+    # ["."] or find_package(): Include all packages under the current directory 
     # before: find_packages(),
     install_requires=[],
     entry_points={
         "console_scripts": [
-            "gites=my_package.cli:main_bulkpush",
-            "gites=my_package.cli:main_bulkpull"
+            "gites-lpush=my_package.cli:cli_lpush",
         ]# we define multiple entry points like this here. 
     },
     classifiers=[

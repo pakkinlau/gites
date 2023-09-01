@@ -5,7 +5,7 @@ This module should not contains main functions that the package would use.
 
 import os
 import json
-from ConfigJSONHandler import ConfigJSONHandler
+from subpackage.ConfigJSONHandler import ConfigJSONHandler
 
 
 

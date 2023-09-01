@@ -1,7 +1,7 @@
 import os
-from _SubprocessHandler import run
+from subpackage._SubprocessHandler import run
 import datetime
-from DatastoreJSONHandler import DatastoreJSONHandler
+from subpackage.DatastoreJSONHandler import DatastoreJSONHandler
 
 # A concise interface function to other module:  
 def bulkpush(list_of_repo):
@@ -71,6 +71,11 @@ class GitPushManager:
             commit_command = ["git", "commit", "-m", f"{tag_message}. Datetime tag: {timetag_for_commit}"]
             return_code, stdout = run(commit_command, loc=repo)
             # Case 2: Any other case
+            if "Your branch is up to date" in stdout:
+                print("No changes to commit.")
+                self.no_effect_repo.append(repo)
+                print("No effect to the repo. Code: 1sa3a")
+                continue
             if return_code != 0:
                 self.failed_repo.append(repo)
                 print("Failed. Code: 1zsxer2")
