@@ -2,8 +2,8 @@ import os
 import time 
 import json
 
-from _SubprocessHandler import run
-from _Timing import timing
+from ._SubprocessHandler import run
+from ._Timing import timing
 
 # A concise interface function to other module:  
 def bulkclone():

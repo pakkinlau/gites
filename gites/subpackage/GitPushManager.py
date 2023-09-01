@@ -1,7 +1,8 @@
 import os
-from subpackage._SubprocessHandler import run
 import datetime
-from subpackage.DatastoreJSONHandler import DatastoreJSONHandler
+
+from ._SubprocessHandler import run
+from .DatastoreJSONHandler import DatastoreJSONHandler
 
 # A concise interface function to other module:  
 def bulkpush(list_of_repo):

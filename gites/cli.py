@@ -45,7 +45,7 @@ def main():
     subparsers = parser.add_subparsers(dest='command', help='Available commands')
 
     # Create a subparser for the 'push' command
-    push_parser = subparsers.add_parser('push', help='Push changes to Git')
+    push_parser = subparsers.add_parser('lpush', help='Push changes to Git')
     push_parser.set_defaults(func=cli_lpush)
 
     args = parser.parse_args()
