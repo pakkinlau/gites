@@ -1,15 +1,21 @@
 from setuptools import setup, find_packages
 
+package_data = {
+    'gites.subpackage': ['package_setup.json'],
+}
+
 setup(
     name='gites',
-    version='0.1.7',
+    version='0.1.8',
     description='gites is the home of all developers. It provides bulk clone, bulk push, bulk pull etc. Contact me with my discord ID: pakkin.lau',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
     author='Pak Kin LAU',
     author_email='kinlau529@gmail.com',
     url='https://github.com/pakkinlau/gites',
-    packages=find_packages(),  
+    packages=find_packages(),
+    package_data = package_data,
+    include_package_data= True,  
     # ["."] or find_package(): Include all packages under the current directory 
     # before: find_packages(),
     install_requires=[],
