@@ -94,7 +94,7 @@ pip install gites
 - Ensure you place my_gites.json in a folder that's regularly backed up in the cloud, such as a local GitHub repository or Google Drive folder.
 
 - Here's a template for `my_gites.json`:
-    - "repositories": List your repositories here. Include the repository name and its remote URL (e.g., GitHub URL).
+    - "repositories": List your repositories here. Include the repository name and its remote URL (e.g., GitHub URL). If you are just playing around, and not trying to bulk clone packages with gites, you can skip specifying this part.
     - "root_directory": Specify the local directory where your repositories are stored on your computer.
 ```javascript
 {
