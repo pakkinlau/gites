@@ -5,7 +5,7 @@ This module should not contains main functions that the package would use.
 
 import os
 import json
-from .ConfigJSONHandler import ConfigJSONHandler
+from .config_json_handler import ConfigJSONHandler
 
 ### Complete structure: 
 class DatastoreJSONHandler:

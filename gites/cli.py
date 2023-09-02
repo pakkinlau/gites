@@ -13,8 +13,8 @@ argparse module parse 'subcommands' from command-line arguments.
 """
 
 
-from .subpackage.ConfigJSONHandler import ConfigJSONHandler
-from .subpackage.GitPushManager import GitPushManager
+from .subpackage.config_json_handler import ConfigJSONHandler
+from .subpackage.git_push_manager import GitPushManager
 
 import argparse
 

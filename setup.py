@@ -6,7 +6,7 @@ package_data = {
 
 setup(
     name='gites',
-    version='0.1.9',
+    version='0.2.0',
     description='gites is the home of all developers. It provides bulk clone, bulk push, bulk pull etc. Contact me with my discord ID: pakkin.lau',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',

@@ -1,7 +1,7 @@
 import os
 import util
-from ._SubprocessHandler import _SubprocessHandler
-from .DatastoreJSONHandler import DatastoreJSONHandler
+from ._subprocess_handler import _SubprocessHandler
+from .datastore_json_handler import DatastoreJSONHandler
 
 
 # Complete structure: 

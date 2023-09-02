@@ -1,8 +1,10 @@
 import os
 import datetime
 
-from ._SubprocessHandler import run
-from .DatastoreJSONHandler import DatastoreJSONHandler
+from gites.subpackage.datastore_json_handler import DatastoreJSONHandler
+from gites.subpackage._subprocess_handler import run
+
+
 
 # A concise interface function to other module:  
 def bulkpush(list_of_repo):
@@ -22,6 +24,7 @@ class GitPushManager:
         self.success_repo = []
         self.failed_repo = []
         self.no_effect_repo = []
+        self.repo_that_remote_has_new_update = []
         
         # go to root folder before list pushing. 
         os.chdir(self.root_folder)
@@ -33,16 +36,47 @@ class GitPushManager:
         os.chdir(self.root_folder)
 
         for repo in self.repo_list:
+            """
+            chain of commands for each repo 
+            (if failed, stop and skip to the next repo):
+
+            git fetch
+            git checkout main
+            git status
+            git add --all
+            git commit -m {tag}
+            git push origin main
+            """
+            
             print("+" * 72)
             print(f"Current working directory: {os.getcwd()}")
             print(f"Working on repository: {repo}")
             
+            # Git fetch
+            return_code, stdout = run(["git", "fetch"], loc = repo)
+            if return_code != 0:
+                self.no_effect_repo.append(repo)
+                self.repo_that_remote_has_new_update.append(repo)
+                message = f"""
+                Everytime before pushing changes for any repo, gites would fetch, and new updates on the remote server might be found. 
+                This package will collect all repos that there are updates in the remote server, as a list. 
+                
+                Step 1: 
+                You might use 'gites lpull' to pull all repos in your root folders, if any particular repos only has been changed in the remote server,
+                but no changes in the local folder. That command will gives you a summary of which folders are pulled, which folders has version conclict.
+
+                Step 2:
+                After step 1, if there are still repos has conflict, you might use `git pull` to each repos that has been indicated as `version conflict`, and fix them one by one. 
+                """
+                print(message)
+                # Continue: terminate the process for this element, proceed next element in the for-loop
+                continue 
+
             # Git checkout
             return_code, _ = run(["git", "checkout", "main"], loc = repo)
             if return_code != 0:
-                self.failed_repo.append(repo)
-                print("Gheckout failed")
-                # Continue: terminate the process for this element, proceed next element in the for-loop
+                self.no_effect_repo.append(repo)
+                print("Git checkout failed")
                 continue 
 
             # Git status
@@ -107,6 +141,8 @@ class GitPushManager:
         print(f"Successful repos (Totally {len(self.success_repo)}): {self.success_repo}")
         print(f"Failed repos (Totally {len(self.failed_repo)}): {self.failed_repo}")
         print(f"No effect repos (Totally {len(self.no_effect_repo)}): {self.no_effect_repo}")
+        print(f"Repos that has new updates in the remote server (Totally {len(self.repo_that_remote_has_new_update)}): {self.repo_that_remote_has_new_update}")
+
 
 # Testing unit: 
 if __name__ == "__main__":
