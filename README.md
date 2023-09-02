@@ -54,25 +54,38 @@ Compare with `vscode source control`:
 
 ## Functionalities of the package: 
 
-- JSON data store: 
-    - Memorize what are the repos that you owns and their remote link. You are save it in a particular location and clone all your repos all at once with that JSON as a memory.
+### JSON data store: 
+- **Remember Your Repos**: Gites allows you to effortlessly store information about the repositories you own, including their remote links, in a JSON file. This file serves as a convenient memory for your repositories.
+
 >>
-- Auto-large-file-management: 
-    - Very often, we might incidently include large size file in our commit, it would stucks the commit-push process. and The package would provide a set of hooks on each of your repos, which provide versatile ability of handling file size error. If there is any large size file detected, that file would be shown in the summary window.
+### Auto-large-file-management: 
+- **Smooth Git Commits**: Gites helps you avoid the frustration of accidentally including large files in your commits, which can slow down the commit-push process.
+- **Hook Integration**: Gites provides hooks for your repositories to handle large file errors. If any large files are detected, they will be highlighted in the summary window.
+- **Pre-Commit Sanity**: Automatically verify or install a pre-commit hook that deals with large files in all your repositories before pushing changes.
+
 >>
-- `gites lpush`:
-    - Bulk pushing your repos from a local folder of your computer. Once you have specified the root folder, that root folder can be considered as your own google drive. You can just sync all the changes with ease, by one click. 
-![Alt text](images/push demo.png)
+
+---
+
+## Package commands:
+
+### `gites lpush`:
+**Bulk Pushing Made Easy**: With Gites, you can quickly push changes from a local folder on your computer. Just specify the root folder, and it becomes your personal Git sync center, simplifying the synchronization process.
+
+![Alt text](images/pushdemo.png)
 
 
-- `gites lclone`: 
-    - Bulk cloning your repos from the datastore json. It is still in testing.
+- `gites lclone`(alpha): 
+- **Bulk Cloning Convenience**: Gites offers a feature to bulk clone repositories from your JSON data store. This feature is currently in beta testing.
+
 >>
-- `gites lfetch`:
-    - Bulk fetching your repos from a local folder of your computer. It is still in testing.
+- `gites lfetch`(alpha):
+- **Bulk Fetching Power**: Bulk fetch your repositories from a local folder on your computer. This feature is still in testing.
+
 >>
-- `gites lpull`
-    - Bulk pulling your repos from a local folder of your computer. It is still in testing.
+- `gites lpull`(alpha):
+- **Bulk Pulling Ease**: Gites allows you to bulk pull repositories from your local folder. This feature is still in testing.
+
 >>
 
 ---
@@ -86,8 +99,10 @@ Install Gites using pip:
 ```bash
 pip install gites
 ```
+### Step 2: Organize Your Repositories
+- To use gites effectively, create a dedicated folder on your local computer that will house all the repositories you wish to manage.
 
-### Step 2: Create a my_gites.json Configuration File
+### Step 3: Create a my_gites.json Configuration File
 
 - To use gites effectively, you need to create a configuration file named `my_gites.json`. This file will store information about your repositories and their locations. Follow these guidelines:
 
@@ -110,7 +125,8 @@ pip install gites
 
 
 ```
-### Step 3: Use any `gites` commands from the terminal
+
+### Step 4: Use any `gites` commands from the terminal
 
 Now that you've set up gites, you can start using it to manage your repositories efficiently. Simply open your terminal and execute Gites commands.
 
@@ -120,7 +136,7 @@ gites lpush
 ```
 The first time you install or reinstall Gites, it will prompt you to specify the location of your `my_gites.json` datastore file. You can paste the file path of the file we have made in step 2, into the terminal.
 
-![Alt text](images/setup demo.png)
+![Alt text](images/setupdemo.png)
 
 Once you've set the configuration file's location, Gites won't ask for it again.
 
