@@ -62,6 +62,9 @@ Compare with `vscode source control`:
 >>
 - `gites lpush`:
     - Bulk pushing your repos from a local folder of your computer. Once you have specified the root folder, that root folder can be considered as your own google drive. You can just sync all the changes with ease, by one click. 
+![Alt text](images/push demo.png)
+
+
 - `gites lclone`: 
     - Bulk cloning your repos from the datastore json. It is still in testing.
 >>
@@ -117,7 +120,7 @@ gites lpush
 ```
 The first time you install or reinstall Gites, it will prompt you to specify the location of your `my_gites.json` datastore file. You can paste the file path of the file we have made in step 2, into the terminal.
 
-[image]
+![Alt text](images/setup demo.png)
 
 Once you've set the configuration file's location, Gites won't ask for it again.
 
