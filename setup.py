@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='gites',
-    version='0.1.6',
+    version='0.1.7',
     description='gites is the home of all developers. It provides bulk clone, bulk push, bulk pull etc. Contact me with my discord ID: pakkin.lau',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
@@ -15,9 +15,10 @@ setup(
     install_requires=[],
     entry_points={
         "console_scripts": [
-            "gites=gites.cli:cli_lpush", 
-            # the key is the first keyword for the user to use the package in the terminal.
-            # the value should be the entry point function after the terminal received that keyword.
+            "gites=gites.cli:main", 
+            # gites: the key is the keyword you will use to invoke the package from the command line. 
+            # gites.cli: this refer to the module where the entry point function is location. 
+            # cli_lpush: this is the name of function within the module that will be executed when you run gites.
         ]
     },
     classifiers=[

@@ -4,9 +4,12 @@ which help centralize the logic for handling variaous commands and make it easie
 and expand in the future. 
 
 There are two parts need to be edited to make CLI works. 
-1. cli.py: it is an adapter between CLI listener in `setup.py` and the functionalities from subpackages,
-2. setup.py: the `entry_points` attribute setup the listeners and the related keywords, that subsequently
-the user can use them in their terminal to trigger those functionalities. 
+1. cli.py: it is an adapter between CLI listener in `setup.py` and the functionalities from subpackages.
+argparse module parse 'subcommands' from command-line arguments. 
+
+
+2. setup.py: the `entry_points` attribute setup the listeners and the related keywords.
+'gites' considered as entry-point and the first keyword of the command to invoke the package.
 """
 
 
@@ -20,13 +23,25 @@ def _check_datastore_location():
     datastore_json_path = ConfigJSONHandler.check_initial_setup_then_get_datastore_json_address()
 
 def cli_lpush():
-    parser = argparse.ArgumentParser(description='Push changes to Git')
-    args = parser.parse_args()
     GitPushManager().lpush() 
 
+def main():
+    parser = argparse.ArgumentParser(description='Command-line interface for gites package')
+    # subparsers handle subcommands. 
+    subparsers = parser.add_subparsers(dest='command', help='Available commands')
+
+    # Create a subparser for the 'push' command
+    push_parser = subparsers.add_parser('lpush', help='Push changes to Git')
+    push_parser.set_defaults(func=cli_lpush)
+
+    args = parser.parse_args()
+
+    if hasattr(args, 'func'):
+        args.func()
+
 """
-make sure we collect all terminal cli into one function. Because the listener file would 
-be located at ./bin/gites.
+Also check the CLI entry point script at <package_root_folder>/bin/gites.
+There should be a shebang in the first line, to be something like: #!/usr/bin/env python
 """
 
 # The content of that file would be like:
@@ -40,18 +55,9 @@ if __name__ == '__main__':
     sys.argv[0] = re.sub(r'(-script\.pyw|\.exe)?$', '', sys.argv[0])
     sys.exit(cli_lpush())
 """
-def main():
-    parser = argparse.ArgumentParser(description='Command-line interface for gites package')
-    subparsers = parser.add_subparsers(dest='command', help='Available commands')
 
-    # Create a subparser for the 'push' command
-    push_parser = subparsers.add_parser('lpush', help='Push changes to Git')
-    push_parser.set_defaults(func=cli_lpush)
-
-    args = parser.parse_args()
-
-    if hasattr(args, 'func'):
-        args.func()
 
 if __name__ == "__main__":
     cli_lpush()
+
+

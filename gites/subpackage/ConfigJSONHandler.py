@@ -33,15 +33,13 @@ class ConfigJSONHandler:
     def __init__(self):
         # all details of config.json should be put at here. 
         self.config_json_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "package_setup.json")
+        # return something like: /home/kin/All_Github_Repos/gites/gites/subpackage/package_setup.json
         self.config_data: dict = self._load_config()
-        if self.config_data:
-            # the second parameter of `.get()` method is the value to be returned if the key is not found in the dictionary. 
-            self.json_initial_setup_check = self.config_data.get("initial_setup", False) #
-            self.default_datastore_json_name = self.config_data.get("default_datastore_json_name", "my_gites.json")
-            self.root_dir_of_gites_datastore_json = self.check_initial_setup_then_get_datastore_json_address()
-            self.gites_datastore_json_location = os.path.join(self.root_dir_of_gites_datastore_json, self.default_datastore_json_name)
-        else:
-            raise RuntimeError("Failed to load config data.")
+        # the second parameter of `.get()` method is the value to be returned if the key is not found in the dictionary. 
+        self.json_initial_setup_check = self.config_data.get("initial_setup", False) #
+        self.default_datastore_json_name = self.config_data.get("default_datastore_json_name", "my_gites.json")
+        self.root_dir_of_gites_datastore_json = self.check_initial_setup_then_get_datastore_json_address()
+        self.gites_datastore_json_location = os.path.join(self.root_dir_of_gites_datastore_json, self.default_datastore_json_name)
 
 
     def _load_config(self):
@@ -56,7 +54,7 @@ class ConfigJSONHandler:
                 raise SystemExit("Terminating due to unexpected error")
         else:
             print("Config JSON file not found:", self.config_json_path)
-            return None
+            raise RuntimeError(f"Failed to load config data on the location: {self.config_json_path}")
 
     def _update_config(self, key, value):
         """A private method that update values for a specific key on the config.json.
