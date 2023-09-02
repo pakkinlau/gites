@@ -50,125 +50,78 @@ Compare with `vscode source control`:
 
 (Note: We will add real-time update, progress tracking bar to the package in the future to make the package to be more competitive)
 
+---
+
 ## Functionalities of the package: 
 
 - JSON data store: 
-    - Memorize what are the repos that you owns and their remote link. You are save it in a particular location and clone all your repos all at once with that JSON as a memory. 
->>
-- Bulkclone: 
-    - Users could clone a list of repos from their json file, which mimic the download actions of using a cloud storage
->>
-- Bulkfetch/pull:
-    - We will build it later. 
+    - Memorize what are the repos that you owns and their remote link. You are save it in a particular location and clone all your repos all at once with that JSON as a memory.
 >>
 - Auto-large-file-management: 
     - Very often, we might incidently include large size file in our commit, it would stucks the commit-push process. and The package would provide a set of hooks on each of your repos, which provide versatile ability of handling file size error. If there is any large size file detected, that file would be shown in the summary window.
 >>
-- Auto-large-file-packing-and-push: 
-    - If there are large files, our package also included a functionality that providing hooks to all repos. Implementing the pre-commit hook to prevent files larger than 100MB from being committed. This feature ensures that large and unnecessary files do not clutter your repository and slow down your Git workflow.
+- `gites lpush`:
+    - Bulk pushing your repos from a local folder of your computer. Once you have specified the root folder, that root folder can be considered as your own google drive. You can just sync all the changes with ease, by one click. 
+- `gites lclone`: 
+    - Bulk cloning your repos from the datastore json. It is still in testing.
 >>
-- Bulk-push: 
-    - Once you have specified the root folder, that root folder can be considered as your own google drive. You can just sync all the changes with ease, by one click. 
+- `gites lfetch`:
+    - Bulk fetching your repos from a local folder of your computer. It is still in testing.
+>>
+- `gites lpull`
+    - Bulk pulling your repos from a local folder of your computer. It is still in testing.
 >>
 
+---
 
-## The journey of auto-packing your repository
+## The journey of using this package
 
-### Step 1 (optional): Setup the default location of the `gites-config.json` file
-- `gites-config.json` would keep up all the records required to execute the gitflow commands. If you put it inside this package, as you upgrade the package, your data would lose. 
-- You should locate this datastore file on another repo folder. So the datastore file would also included in the sync process. 
-- If you don't do this step, the `gites-config.json` will be located in `home/pgf-package/gites-config.json`
+### Step 1: Installation
 
-### Step 2a (necessary): Specify the root folder location
-- All the progress will be done around the root folder. This information will be stored in the json.
-- You might do it this way: 
+Install Gites using pip:
 
-```python
-abc.update_root_into('.....')
-```
-
-### Step 2b (optional): Initialize the `gites-config.json` file
-- When cloning, you need to provide both the folder name, and the remote repo link for each repo.
-- If you don't do that, the package will create an empty package for you in other actions if it cannot find the json in that location.
-- If that is your first time using this package, you should follow these step to update your datastore json:
-
-```python
-# Testing unit: 
-if __name__ == "__main__":
-    
-    root_directory = os.path.join(os.path.expanduser("~"), "All_Github_Repos")
-    list_of_repo = {
-        # "Git management": "https://github.com/pakkinlau/your-repo.git", # A repo should not clone itself. 
-        "Guides": "https://github.com/pakkinlau/guides.git",
-        "Textual notes": "https://github.com/pakkinlau/textual-notes.git",
-        "Tutorial template": "https://github.com/pakkinlau/tutorial-template.git",
-        "Video materials": "https://github.com/pakkinlau/video-materials.git",
-        "JS webpage coding gym": "https://github.com/pakkinlau/js-webpage-coding-gym.git",
-        "Python coding gym": "https://github.com/pakkinlau/python-coding-gym.git",
-    }
-
-    # Determine the path to the JSON file in the same directory as the script
-    json_file_path = default_json_path
-
-    # test json writing + updating
-    update_repo_info(list_of_repo)
-```
-
-And the resulting json datastore would be like this:
-```json
-{
-    "repositories": [
-        {
-            "name": "Guides",
-            "remote_url": "https://github.com/pakkinlau/guides.git"
-        },
-        {
-            "name": "Textual notes",
-            "remote_url": "https://github.com/pakkinlau/textual-notes.git"
-        },
-    ],
-    "root_directory": "/home/kin/All_Github_Repos"
-}
-```
-
-### Step 3 (optional): Bulk clone all repos from remote
-- With the datastore json, you can start clone all of your repos from remote. 
-- After processing, a summary of updated/no-effect/failed repos list will be displayed.
-
-### Step 4 (optional): Bulk fetch-pull all of your repos
-- This function is still working in progress.
-- With that, you can look at the updates of all repos in one-clik.
-- After processing, a summary of updated/no-effect/failed repos list will be displayed.
-
-### Step 5 (optional): Bulk push all of your repos
-- The package would search all the repos in the root folder that you have specified. And try to execute commit-push for each repos.
-
-The successful push will give you back this summary message:
-![Alt text](images/image.png)
-
-
-## Terminal operations: 
-
-- Installation of the package
 ```bash
 pip install gites
 ```
 
-- Ensuring your terminal has already logged in your github account:
-```bash
-git abcdefg
-```
+### Step 2: Create a my_gites.json Configuration File
 
-- Bulk push for all repos in the root folder you specified location: 
-```bash
-abc bulk push
-```
+- To use gites effectively, you need to create a configuration file named `my_gites.json`. This file will store information about your repositories and their locations. Follow these guidelines:
 
-- Setup the `gites-config.json` within terminal:
-```bash
-agit init
-```
+- Ensure you place my_gites.json in a folder that's regularly backed up in the cloud, such as a local GitHub repository or Google Drive folder.
 
+- Here's a template for `my_gites.json`:
+    - "repositories": List your repositories here. Include the repository name and its remote URL (e.g., GitHub URL).
+    - "root_directory": Specify the local directory where your repositories are stored on your computer.
+```javascript
+{
+    "repositories": [
+        {
+            "name": "gites",
+            "remote_url": "https://github.com/pakkinlau/gites"
+        },
+
+    ],
+    "root_directory": "/home/kin/All_Github_Repos"
+}
+
+
+```
+### Step 3: Use any `gites` commands from the terminal
+
+Now that you've set up gites, you can start using it to manage your repositories efficiently. Simply open your terminal and execute Gites commands.
+
+For example, to push all repositories from your local folder, run:
+```bash
+gites lpush
+```
+The first time you install or reinstall Gites, it will prompt you to specify the location of your `my_gites.json` datastore file. You can paste the file path of the file we have made in step 2, into the terminal.
+
+[image]
+
+Once you've set the configuration file's location, Gites won't ask for it again.
+
+And the command will be automatically run
 
 ## Future development
 
