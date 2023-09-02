@@ -7,8 +7,6 @@ import os
 import json
 from .ConfigJSONHandler import ConfigJSONHandler
 
-
-
 ### Complete structure: 
 class DatastoreJSONHandler:
     def __init__(self):
@@ -29,6 +27,8 @@ class DatastoreJSONHandler:
                     existing_data = json.load(json_file)
                 except json.JSONDecodeError as e:
                     print(f"Error loading JSON: {e}")
+        else:
+            raise SystemExit(f"Terminating due to the datastore json file is not existing in: {self.gites_datastore_json_location}")
         # case 2a: after opening the file, the outermost structure is not a json
         if not isinstance(existing_data, dict):
             print("Please check the file. The whole file is not detected as a json file.")
@@ -42,6 +42,9 @@ class DatastoreJSONHandler:
         if "repositories" not in existing_data:
             print("it is an empty json. creating structure for it...")
             existing_data["repositories"] = []
+        # case 4: if "root_directory" is not specified in the datastore json.
+        if "root_directory" not in existing_data:
+            raise SystemExit(f"Terminating due to the root directory of your git repository folders are not properly defined in your datastore json: {self.gites_datastore_json_location}")
         # finally return data
         return existing_data
 

@@ -103,9 +103,9 @@ class ConfigJSONHandler:
 
         prompt = f"""
         You are the first time using the package, or have upgraded the package. 
-        If you want to define a customized my_gites.json in the next step, enter y.
+        If you want to define a customized path for your datastore json in the next step, enter y.
         If you want to use the default location, enter n.
-        (Default location: {default_json_path})
+        
         
         Please enter (y/n) to proceed.
         """
@@ -128,8 +128,11 @@ class ConfigJSONHandler:
                     print(f"Error creating custom path: {e}")
                     raise SystemExit("Terminating due to unexpected error")
             elif use_custom_path.lower() == "n":
+                message = f"Default location of your json file: {default_json_path}"
+                input(message + " Press any key to continue...")
                 self._update_config("gites_datastore_json_location", default_json_path)
                 self._update_config("initial_setup", False)
+                
                 return default_json_path
             else:
                 print("Invalid input.")
