@@ -1,0 +1,10 @@
+{
+    "repositories": [
+        {
+            "name": "gites",
+            "remote_url": "https://github.com/pakkinlau/gites"
+        },
+
+    ],
+    "root_directory": "/home/kin/All_Github_Repos"
+}
