@@ -97,7 +97,7 @@ Compare with `vscode source control`:
 Install Gites using pip:
 
 ```bash
-pip install gites
+pip install gites==0.2.0
 ```
 ### Step 2: Organize Your Repositories
 - To use gites effectively, create a dedicated folder on your local computer that will house all the repositories you wish to manage.
