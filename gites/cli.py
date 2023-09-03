@@ -29,7 +29,7 @@ def cli_lpush():
     GitPushManager().lpush() 
     
 def cli_lclone():
-    GitPushManager().lpush() 
+    RepoCloner().lclone() 
 
 def main():
     parser = argparse.ArgumentParser(description='Command-line interface for gites package')
