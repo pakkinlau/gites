@@ -19,9 +19,13 @@ from .subpackage.repo_cloner import RepoCloner
 
 import argparse
 
+def _check_datastore_location():
+    """This function would be optionally used by multiple CLI actions. """
+    datastore_json_path = ConfigJSONHandler.check_initial_setup_then_get_datastore_json_address()
+
 def cli_lpush():
     GitPushManager().lpush() 
-    
+
 def cli_lclone():
     RepoCloner().lclone() 
 
@@ -30,14 +34,12 @@ def main():
     # subparsers handle subcommands. 
     subparsers = parser.add_subparsers(dest='command', help='Available commands')
 
-    # Create a subparser for the 'lpush' command
-    push_parser = subparsers.add_parser('lpush', help='Push a list of repos from local to Git')
+    # Create a subparser for the 'push' command
+    push_parser = subparsers.add_parser('lpush', help='Push changes to Git')
     push_parser.set_defaults(func=cli_lpush)
 
-    # Create a subparser for the 'lclone' command
-    # clone_parser = subparsers.add_parser('lclone', help='Clone a list of repos from Git to local computer')
-    # clone_parser.set_defaults(func=cli_lclone)
-
+    clone_parser = subparsers.add_parser('lclone', help='Clone a list of repos from Git to local computer')
+    clone_parser.set_defaults(func=cli_lclone)
 
     args = parser.parse_args()
 
@@ -62,7 +64,6 @@ if __name__ == '__main__':
 """
 
 
-# if __name__ == "__main__":
-#     main()
-
+if __name__ == "__main__":
+    cli_lpush()
 
