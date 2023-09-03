@@ -55,9 +55,11 @@ class _SubprocessHandler:
         except subprocess.CalledProcessError as e:
             print("Subprocess failed with exit code:", e.returncode)
             print("Error output:", e.stderr)
+            return e.returncode, str(e.stderr)
         # Case 3b: Generic catch-all for any other exceptions. 
         except Exception as e:
             print("An error occurred:", e)
+            return 1, str(e)  # Return an error code and error message
 
 # Testing unit: 
 if __name__ == "__main__":

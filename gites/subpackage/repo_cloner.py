@@ -46,7 +46,7 @@ class RepoCloner:
             return 2
         
         # execute git command
-        command = ["git", "clone", remote_url, local_path]
+        command = ["git", "clone", remote_url]
         return_code, _ = run(command, loc = local_path)
         
         # to verify the clone
@@ -62,6 +62,7 @@ class RepoCloner:
             repo_name = repo_info["name"]
             repo_url = repo_info["remote_url"]
             local_path = os.path.join(self.root_folder, repo_name)
+            os.chdir(local_path)
             status_message = self.clone_repo(repo_url, local_path)
             if status_message !=0:
                 self.failed.append(repo_name)
