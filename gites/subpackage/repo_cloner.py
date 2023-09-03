@@ -47,7 +47,7 @@ class RepoCloner:
         
         # execute git command
         command = ["git", "clone", remote_url, local_path]
-        return_code, _ = run(command)
+        return_code, _ = run(command, loc = local_path)
         
         # to verify the clone
         git_folder_path = os.path.join(local_path, ".git")
