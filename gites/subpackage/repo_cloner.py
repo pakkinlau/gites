@@ -44,7 +44,7 @@ class RepoCloner:
         if os.path.exists(local_path) and any(os.listdir(local_path)):
             print(f"Repository '{local_path}' already exists. Skipping cloning.")
             return 2
-        # create local folder if it is not exist. 
+        # create local folder if it is not exist 
         else:
             os.makedirs(local_path)
             os.chdir(local_path)
