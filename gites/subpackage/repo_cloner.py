@@ -45,7 +45,7 @@ class RepoCloner:
             print(f"Repository '{local_path}' already exists. Skipping cloning.")
             return 2
         command = ["git", "clone", remote_url, local_path]
-        run(command, check=True)
+        run(command)
         print(f"Repository '{local_path}' cloned successfully.")
         
         git_folder_path = os.path.join(local_path, ".git")
