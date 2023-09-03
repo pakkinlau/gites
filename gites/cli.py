@@ -35,10 +35,10 @@ def main():
     subparsers = parser.add_subparsers(dest='command', help='Available commands')
 
     # Create a subparser for the 'push' command
-    push_parser = subparsers.add_parser('lpush', help='Push changes to Git')
+    push_parser = subparsers.add_parser(dest='lpush', help='Push changes to Git')
     push_parser.set_defaults(func=cli_lpush)
 
-    clone_parser = subparsers.add_parser('lclone', help='Clone a list of repos from Git to local computer')
+    clone_parser = subparsers.add_parser(dest='lclone', help='Clone a list of repos from Git to local computer')
     clone_parser.set_defaults(func=cli_lclone)
 
     args = parser.parse_args()
