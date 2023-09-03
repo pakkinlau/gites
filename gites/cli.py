@@ -23,10 +23,13 @@ def _check_datastore_location():
     """This function would be optionally used by multiple CLI actions. """
     datastore_json_path = ConfigJSONHandler.check_initial_setup_then_get_datastore_json_address()
 
-"""
+
+
 def cli_lpush():
     GitPushManager().lpush() 
-"""    
+    
+def cli_lclone():
+    GitPushManager().lpush() 
 
 def main():
     parser = argparse.ArgumentParser(description='Command-line interface for gites package')
@@ -35,11 +38,11 @@ def main():
 
     # Create a subparser for the 'lpush' command
     push_parser = subparsers.add_parser('lpush', help='Push a list of repos from local to Git')
-    push_parser.set_defaults(func=GitPushManager().lpush)
+    push_parser.set_defaults(func=cli_lpush)
 
     # Create a subparser for the 'lclone' command
     clone_parser = subparsers.add_parser('lclone', help='Clone a list of repos from Git to local computer')
-    clone_parser.set_defaults(func=RepoCloner().lclone)
+    clone_parser.set_defaults(func=cli_lclone)
 
 
     args = parser.parse_args()
