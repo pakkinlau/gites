@@ -35,11 +35,11 @@ def main():
 
     # Create a subparser for the 'lpush' command
     push_parser = subparsers.add_parser('lpush', help='Push a list of repos from local to Git')
-    push_parser.set_defaults(func=GitPushManager().lpush())
+    push_parser.set_defaults(func=GitPushManager().lpush)
 
     # Create a subparser for the 'lclone' command
     push_parser = subparsers.add_parser('lclone', help='Clone a list of repos from Git to local computer')
-    push_parser.set_defaults(func=RepoCloner().lclone())
+    push_parser.set_defaults(func=RepoCloner().lclone)
 
 
     args = parser.parse_args()
@@ -65,7 +65,7 @@ if __name__ == '__main__':
 """
 
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()
 
 
