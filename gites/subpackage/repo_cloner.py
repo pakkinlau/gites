@@ -41,13 +41,15 @@ class RepoCloner:
     def clone_repo(self, remote_url, local_path):
         
         # check whether that folder already exists AND it is not empty.
-        # It won't bother, if it is already exist. 
+        # It won't bother any existing folder. 
         if os.path.exists(local_path) and any(os.listdir(local_path)):
             print(f"Repository '{local_path}' already exists. Skipping cloning.")
             return 2
         # Don't need to create folder, because git clone would take care of it.
         
         # execute git command
+        # go to the root folder
+        os.chdir(self.root_folder)
         command = ["git", "clone", remote_url]
         return_code, _ = run(command, loc = self.root_folder)
         
