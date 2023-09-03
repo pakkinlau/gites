@@ -40,10 +40,14 @@ class RepoCloner:
 
     def clone_repo(self, remote_url, local_path):
         
-        # create local folder
+        # check whether that folder already exists AND it is not empty
         if os.path.exists(local_path) and any(os.listdir(local_path)):
             print(f"Repository '{local_path}' already exists. Skipping cloning.")
             return 2
+        # create local folder if it is not exist. 
+        else:
+            os.makedirs(local_path)
+            os.chdir(local_path)
         
         # execute git command
         command = ["git", "clone", remote_url]
@@ -62,17 +66,16 @@ class RepoCloner:
             repo_name = repo_info["name"]
             repo_url = repo_info["remote_url"]
             local_path = os.path.join(self.root_folder, repo_name)
-            os.chdir(local_path)
             status_message = self.clone_repo(repo_url, local_path)
-            if status_message !=0:
+            if status_message == 2:
+                self.no_effect.append(repo_name)
+                continue
+            elif status_message !=0:
                 self.failed.append(repo_name)
                 continue
             elif status_message == 0:
                 self.success.append(repo_name)
                 print(f"Repository '{repo_name}' cloned successfully.")
-            elif status_message == 2:
-                self.no_effect.append(repo_name)
-                continue
 
     def print_summary(self):
         print("Repositories cloned successfully:", self.success)
