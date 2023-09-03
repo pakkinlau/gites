@@ -70,11 +70,13 @@ Compare with `vscode source control`:
 ### `gites lpush`:
 
 **Bulk Pushing Made Easy**: With Gites, you can quickly push changes from a local folder on your computer. Just specify the root folder, and it becomes your personal Git sync center, simplifying the synchronization process.
-
+- Preview:
 ![Alt text](images/pushdemo.png)
 
-- `gites lclone`(alpha):
+### `gites lclone`:
 - **Bulk Cloning Convenience**: Gites offers a feature to bulk clone repositories from your JSON data store. This feature is currently in beta testing.
+- Preview:
+![Alt text](images/clonedemo.png)
 
 - `gites lfetch`(alpha):
 - **Bulk Fetching Power**: Bulk fetch your repositories from a local folder on your computer. This feature is still in testing.

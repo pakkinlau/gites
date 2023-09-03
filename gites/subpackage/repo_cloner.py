@@ -47,21 +47,25 @@ class RepoCloner:
         # create local folder if it is not exist 
         else:
             os.makedirs(local_path)
-            os.chdir(local_path)
         
         # execute git command
         command = ["git", "clone", remote_url]
         return_code, _ = run(command, loc = local_path)
         
-        # to verify the clone
+        # to verify the clone, by checking whether the `.git` exist.
         git_folder_path = os.path.join(local_path, ".git")
         if not os.path.exists(git_folder_path):
             print(f"Error: '.git' folder was not generated for repository '{local_path}'. Aborting.")
+            # could put a strong SystemExit here
         
         # return status code 
         return return_code
 
     def clone_repositories(self):
+        
+        # go to the root folder
+        os.chdir(self.root_folder)
+        
         for repo_info in self.list_of_repo_details:
             repo_name = repo_info["name"]
             repo_url = repo_info["remote_url"]
