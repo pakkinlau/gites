@@ -1,6 +1,4 @@
 import os
-import time 
-import json
 
 from ._subprocess_handler import run
 from ._timing import timing
@@ -41,18 +39,23 @@ class RepoCloner:
     """
 
     def clone_repo(self, remote_url, local_path):
+        
+        # create local folder
         if os.path.exists(local_path) and any(os.listdir(local_path)):
             print(f"Repository '{local_path}' already exists. Skipping cloning.")
             return 2
-        command = ["git", "clone", remote_url, local_path]
-        run(command)
-        print(f"Repository '{local_path}' cloned successfully.")
         
+        # execute git command
+        command = ["git", "clone", remote_url, local_path]
+        return_code, _ = run(command)
+        
+        # to verify the clone
         git_folder_path = os.path.join(local_path, ".git")
         if not os.path.exists(git_folder_path):
             print(f"Error: '.git' folder was not generated for repository '{local_path}'. Aborting.")
-            return 1
-        return 0
+        
+        # return status code 
+        return return_code
 
     def clone_repositories(self):
         for repo_info in self.list_of_repo_details:
@@ -60,12 +63,15 @@ class RepoCloner:
             repo_url = repo_info["remote_url"]
             local_path = os.path.join(self.root_folder, repo_name)
             status_message = self.clone_repo(repo_url, local_path)
-            if status_message == 0:
-                self.success.append(repo_name)
-            elif status_message == 1:
+            if status_message !=0:
                 self.failed.append(repo_name)
+                continue
+            elif status_message == 0:
+                self.success.append(repo_name)
+                print(f"Repository '{repo_name}' cloned successfully.")
             elif status_message == 2:
                 self.no_effect.append(repo_name)
+                continue
 
     def print_summary(self):
         print("Repositories cloned successfully:", self.success)
