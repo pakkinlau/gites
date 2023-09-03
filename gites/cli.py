@@ -38,8 +38,8 @@ def main():
     push_parser.set_defaults(func=GitPushManager().lpush)
 
     # Create a subparser for the 'lclone' command
-    push_parser = subparsers.add_parser('lclone', help='Clone a list of repos from Git to local computer')
-    push_parser.set_defaults(func=RepoCloner().lclone)
+    clone_parser = subparsers.add_parser('lclone', help='Clone a list of repos from Git to local computer')
+    clone_parser.set_defaults(func=RepoCloner().lclone)
 
 
     args = parser.parse_args()
