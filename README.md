@@ -96,14 +96,26 @@ Install Gites using pip:
 pip install gites==0.3.7
 ```
 
-- After the pip install is completed, normally pip should help you install your package to your PATH.
-- If you see the following message, that means your IDE/terminal settings are not default settings. 
+- After the pip installation is completed, pip should normally add your package to your PATH automatically.
+- If you encounter the following message, it indicates that your IDE or terminal settings are not using the default configuration:
 ![Alt text](images/PATH.png)
 - To fix it, you need to add the path showing in the PATH of your PC to make the command works in your terminal.
+
+- Adding Gites to the PATH (for making the CLI commands of this package work)
+    - Windows:
+        - 1. Open your taskbar and search for "environment variables."
+          2. Click on "Edit the system environment variables."
+          3. In the "System Properties" window, click the "Environment Variables" button.
+          4. In the "Environment Variables" window, under the "System variables" section, locate the "Path" variable and select
+          5. In the "Edit Environment Variable" window, click the "New" button and add the path where pip has installed your packages.
+          6. Click "OK" to close each of the open windows.
+          7. Restart your terminal or command prompt for the changes to take effect.
     - Linux: 
-        - 1. on terminal, run: `nano ~/.bashrc`
-        - 2. adding this into the last line of the file: `export PATH="$PATH:/home/kin/.local/bin"`
-        - 3. on terminal, run: `source ~/.bashrc`
+        - 1. Open your terminal.
+          2. Use a text editor like nano to edit your ~/.bashrc file. To do this, run: `nano ~/.bashrc`
+          3. Add the following line at the end of the ~/.bashrc file. Make sure to replace /home/kin/.local/bin with the actual path where pip installed your packages: `export PATH="$PATH:/home/kin/.local/bin"`
+          4. Save the changes by pressing Ctrl + O, then press Enter. To exit the text editor, press Ctrl + X.
+          5. Finally, apply the changes to your current terminal session by running:`source ~/.bashrc`
 
 
 ### Step 2: Organize Your Repositories
