@@ -93,7 +93,7 @@ Compare with `vscode source control`:
 Install Gites using pip:
 
 ```bash
-pip install gites==0.2.0
+pip install gites==0.3.7
 ```
 
 - After the pip install is completed, normally pip should help you install your package to your PATH.
