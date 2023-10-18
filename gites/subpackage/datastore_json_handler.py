@@ -52,7 +52,7 @@ class DatastoreJSONHandler:
             print("it is an empty json. creating structure for it...")
             existing_data["repositories"] = []
         # case 4: if "root_directory" is not specified in the datastore json.
-        if "root_directory" not in existing_data:
+        if "root_directories" not in existing_data:
             raise SystemExit(f"Terminating due to the root directory of your git repository folders are not properly defined in your datastore json: {self.gites_datastore_json_location}")
         # finally return data
         return existing_data
