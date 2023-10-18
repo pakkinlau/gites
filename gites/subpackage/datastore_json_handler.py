@@ -15,7 +15,16 @@ class DatastoreJSONHandler:
         self.gites_datastore_json_location = self.config_json_handler.gites_datastore_json_location # this is for naming convention.
         self.data = self.load_datastore_json()
         self.list_of_repo_details = self.data["repositories"] # this return a list of dictionary, containing 'name' and 'remote_url' key for each repo.
-        self.root_dir = self.data["root_directory"]
+        self.root_dir = self.get_root_directory()
+
+    def get_root_directory(self):
+        # Determine the appropriate root directory based on the operating system
+        if os.name == 'posix':  # Unix/Linux/Mac OS
+            return self.data["root_directories"]["linux"]
+        elif os.name == 'nt':  # Windows
+            return self.data["root_directories"]["windows"]
+        else:
+            raise OSError("Unsupported operating system")
 
     def load_datastore_json(self):
         existing_data = {}
