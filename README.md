@@ -70,17 +70,17 @@ Compare with `vscode source control`:
 ### `gites lpush`:
 
 **Bulk Pushing Made Easy**: With Gites, you can quickly push changes from a local folder on your computer. Just specify the root folder, and it becomes your personal Git sync center, simplifying the synchronization process.
+
 - Preview:
-![Alt text](images/pushdemo.png)
+  ![Alt text](images/pushdemo.png)
 
 ### `gites lclone`:
+
 - **Bulk Cloning Convenience**: Gites offers a feature to bulk clone repositories from your JSON data store. This feature is currently in beta testing.
 - Preview:
-![Alt text](images/clonedemo.png)
-
+  ![Alt text](images/clonedemo.png)
 - `gites lfetch`(alpha):
 - **Bulk Fetching Power**: Bulk fetch your repositories from a local folder on your computer. This feature is still in testing.
-
 - `gites lpull`(alpha):
 - **Bulk Pulling Ease**: Gites allows you to bulk pull repositories from your local folder. This feature is still in testing.
 
@@ -98,25 +98,24 @@ pip install gites==0.3.7
 
 - After the pip installation is completed, pip should normally add your package to your PATH automatically.
 - If you encounter the following message, it indicates that your IDE or terminal settings are not using the default configuration:
-![Alt text](images/PATH.png)
+  ![Alt text](images/PATH.png)
 - To fix it, you need to add the path showing in the PATH of your PC to make the command works in your terminal.
-
 - Adding Gites to the PATH (for making the CLI commands of this package work)
-    - Windows:
-        - 1. Open your taskbar and search for "environment variables."
-          2. Click on "Edit the system environment variables."
-          3. In the "System Properties" window, click the "Environment Variables" button.
-          4. In the "Environment Variables" window, under the "System variables" section, locate the "Path" variable and select
-          5. In the "Edit Environment Variable" window, click the "New" button and add the path where pip has installed your packages.
-          6. Click "OK" to close each of the open windows.
-          7. Restart your terminal or command prompt for the changes to take effect.
-    - Linux: 
-        - 1. Open your terminal.
-          2. Use a text editor like nano to edit your ~/.bashrc file. To do this, run: `nano ~/.bashrc`
-          3. Add the following line at the end of the ~/.bashrc file. Make sure to replace /home/kin/.local/bin with the actual path where pip installed your packages: `export PATH="$PATH:/home/kin/.local/bin"`
-          4. Save the changes by pressing Ctrl + O, then press Enter. To exit the text editor, press Ctrl + X.
-          5. Finally, apply the changes to your current terminal session by running:`source ~/.bashrc`
 
+  - Windows:
+    - 1. Open your taskbar and search for "environment variables."
+      2. Click on "Edit the system environment variables."
+      3. In the "System Properties" window, click the "Environment Variables" button.
+      4. In the "Environment Variables" window, under the "System variables" section, locate the "Path" variable and select
+      5. In the "Edit Environment Variable" window, click the "New" button and add the path where pip has installed your packages.
+      6. Click "OK" to close each of the open windows.
+      7. Restart your terminal or command prompt for the changes to take effect.
+  - Linux:
+    - 1. Open your terminal.
+      2. Use a text editor like nano to edit your ~/.bashrc file. To do this, run: `nano ~/.bashrc`
+      3. Add the following line at the end of the ~/.bashrc file. Make sure to replace /home/kin/.local/bin with the actual path where pip installed your packages: `export PATH="$PATH:/home/kin/.local/bin"`
+      4. Save the changes by pressing Ctrl + O, then press Enter. To exit the text editor, press Ctrl + X.
+      5. Finally, apply the changes to your current terminal session by running:`source ~/.bashrc`
 
 ### Step 2: Organize Your Repositories
 
@@ -135,12 +134,18 @@ pip install gites==0.3.7
 {
     "repositories": [
         {
-            "name": "gites",
-            "remote_url": "https://github.com/pakkinlau/gites"
+            "name": "prog-for-humanists",
+            "remote_url": "https://github.com/pakkinlau/prog-for-humanists.git"
         },
-
+        {
+            "name": "Python coding gym",
+            "remote_url": "https://github.com/pakkinlau/python-coding-gym.git"
+        }
     ],
-    "root_directory": "/home/kin/All_Github_Repos"
+    "root_directories": {
+        "linux": "/home/kin/All_github_repos/",
+        "windows": "C:\\Users\\kinla\\Documents\\All_github_repo"
+    }
 }
 
 
