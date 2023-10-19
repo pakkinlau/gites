@@ -3,9 +3,9 @@
 ![Alt text](images/gites.png)
 Image: The photos of "gites".
 
-While I am personally use github as a cloud drive to sync and maintain a lot of personal repos. I found the process of typing git command everyday is very repetitive. And such workflow should be streamlined into a single click.
+I personally use GitHub as a cloud drive to sync and maintain a lot of personal repos. I found the process of typing git commands everyday to be very repetitive. So, I thought this workflow should be streamlined into a single click.
 
-The goal of this package is to mimic the user experience of using a google drive or one drive. This package tries to memorize your github repo names and their link and record it into a single document, and also the commands are streamlined to be one-clicked. In such way, it save your time on synchronzing the packages when developing your projects.
+The goal of this package is to mimic the user experience of using a cloud drive like Google Drive or One Drive. This package tries to memorize your GitHub repo names, their GitHub link and record these into a single document. Git commands are streamlined to be one-clicked. This will save you time when developing and synchronizing your projects like Python packages.
 
 ## Solutions comparison:
 
@@ -47,7 +47,7 @@ Compare with `vscode source control`:
 | Collaboration       | ❌                 | ✔️                   |
 | Performance         | Depends on Implem. | ✔️                   |
 
-(Note: We will add real-time update, progress tracking bar to the package in the future to make the package to be more competitive)
+(Note: We will add real-time updates and progress tracking bars in the future to make the package to be more competitive)
 
 ---
 
