@@ -46,24 +46,6 @@ class GitPullManager:
             print("+" * 72)
             print(f"Current working directory: {os.getcwd()}")
             print(f"Working on repository: {repo}")
-            
-            # Git fetch
-            return_code, stdout = run(["git", "fetch"], loc = repo)
-            if return_code != 0:
-                self.no_effect_repo.append(repo)
-                self.repo_that_remote_has_new_update.append(repo)
-                message = f"""
-                This gites lpull command tries to enter each repo within specified root folder, 
-                and pull the latest update from the remote server.
-                
-                By default 'git pull' would not change the local branch if there is
-                conflicts between the local and remote branch.
-                
-                So it is always safe. 
-                """
-                print(message)
-                # Continue: terminate the process for this element, proceed next element in the for-loop
-                continue 
 
             # Git pull
             return_code, stdout = run(["git", "pull"], loc=repo)
