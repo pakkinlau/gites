@@ -16,6 +16,7 @@ argparse module parse 'subcommands' from command-line arguments.
 from .subpackage.config_json_handler import ConfigJSONHandler
 from .subpackage.git_push_manager import GitPushManager
 from .subpackage.repo_cloner import RepoCloner
+from .subpackage.pull_manager import GitPullManager
 
 import argparse
 
@@ -29,6 +30,9 @@ def cli_lpush():
 def cli_lclone():
     RepoCloner().lclone() 
 
+def cli_lpull():
+    GitPullManager().lpull() 
+
 def main():
     parser = argparse.ArgumentParser(description='Command-line interface for gites package')
     # subparsers handle subcommands. 
@@ -40,6 +44,9 @@ def main():
 
     clone_parser = subparsers.add_parser('lclone', help='Clone a list of repos from Git to local computer')
     clone_parser.set_defaults(func=cli_lclone)
+
+    pull_parser = subparsers.add_parser('lpull', help='Pull a list of repos of local computer')
+    pull_parser.set_defaults(func=cli_lpull)
 
     args = parser.parse_args()
 
