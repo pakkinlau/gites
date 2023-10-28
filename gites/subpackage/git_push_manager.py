@@ -127,7 +127,7 @@ class GitPushManager:
                 continue # type: ignore
             print(f"Commit successful. Output:\n{stdout}")
 
-            # Git push origin main
+            # Git push origin main - 
             push_command = ["git", "push", "origin", "main"]
             _, push_output = run(push_command, loc=repo)
             # Case 3: if there is any error returning code
