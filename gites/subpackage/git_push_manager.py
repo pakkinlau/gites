@@ -105,6 +105,10 @@ class GitPushManager:
             timetag_for_commit = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
             commit_command = ["git", "commit", "-m", f"{tag_message}. Datetime tag: {timetag_for_commit}"]
             return_code, stdout = run(commit_command, loc=repo)
+            if return_code != 0:
+                self.failed_repo.append(repo)
+                print("Git status command failed.")
+                continue # type: ignore
             # Case 2: Any other case
             if "Your branch is up to date" in stdout:
                 print("No changes to commit.")
@@ -126,10 +130,17 @@ class GitPushManager:
             # Git push origin main
             push_command = ["git", "push", "origin", "main"]
             _, push_output = run(push_command, loc=repo)
+            # Case 3: if there is any error returning code
+            if return_code != 0:
+                self.failed_repo.append(repo)
+                print("Git status command failed.")
+                continue # type: ignore
+            # Case 2: A summary message returned by git push, indicating a success push
             if "Total" in push_output or not push_output:
                 self.success_repo.append(repo)
                 # Future development: Scrape the terminal output and collect those data to summary variable.
                 print("Push completed")
+            # Case 1: Any other case
             else:
                 print(f"Push failed. Output:\n{push_output}")
                 self.failed_repo.append(repo)
