@@ -121,8 +121,12 @@ class ConfigJSONHandler:
                 try:
                     custom_path = input(f"Please enter the directory address that contains your {default_datastore_json_name}. "
                                         f"The example is '/home/kin/.yourapp/'. Please do not include the file name. ")
-                    self._update_config("gites_datastore_json_location", custom_path)
-                    self._update_config("initial_setup", False)
+                    if custom_path:
+                        raise SystemExit("Terminating the program since your specified directory path seems wrong. The format should be in like: '/home/kin/All_github_repos/Factual Value Asset'. Try the command and configure it again.")
+                    else:
+                        self._update_config("gites_datastore_json_location", custom_path)
+                        self._update_config("initial_setup", False)
+                        
                     return custom_path
                 except Exception as e:
                     print(f"Error creating custom path: {e}")
