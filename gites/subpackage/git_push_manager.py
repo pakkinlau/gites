@@ -87,10 +87,13 @@ class GitPushManager:
                 self.failed_repo.append(repo)
                 print("Git status command failed.")
                 continue # type: ignore
-            # Case 2: 'Your branch is up to date'
+            if "nothing to commit" in stdout:
+                self.failed_repo.append(repo)
+                print("There are ")
+            # Case 1: 'Your branch is up to date'
             if "nothing to commit, working tree clean" in stdout:
                 self.no_effect_repo.append(repo)
-                print("This repo is new. Proceed the next repo.")
+                print("This repo has nothing to commit. Proceed the next repo.")
                 continue # type: ignore
 
             # Git add all
@@ -101,7 +104,7 @@ class GitPushManager:
                 continue # type: ignore
 
             # Git commit
-            tag_message="Automated add-commit-push"
+            tag_message="Gites: Automated add-commit-push"
             timetag_for_commit = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
             commit_command = ["git", "commit", "-m", f"{tag_message}. Datetime tag: {timetag_for_commit}"]
             return_code, stdout = run(commit_command, loc=repo)
