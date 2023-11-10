@@ -52,7 +52,8 @@ class GitPushManager:
             print(f"Current working directory: {os.getcwd()}")
             print(f"Working on repository: {repo}")
             
-            # Git fetch
+            # Git fetch: a quick check to see if there is any new updates in the remote server..
+            # if it is the case, record it and skip the rest of the process.
             return_code, stdout = run(["git", "fetch"], loc = repo)
             if return_code != 0:
                 self.no_effect_repo.append(repo)
@@ -72,7 +73,7 @@ class GitPushManager:
                 # Continue: terminate the process for this element, proceed next element in the for-loop
                 continue 
 
-            # Git checkout
+            # Git checkout - this command won't run too long. Just a placeholder for future development. 
             return_code, _ = run(["git", "checkout", "main"], loc = repo)
             if return_code != 0:
                 self.no_effect_repo.append(repo)
@@ -152,10 +153,10 @@ class GitPushManager:
             
         print("|" * 72)
         print("Add-commit-push completed for all repos in the root folder. Here is the work summary: ")
-        print(f"Successful repos (Totally {len(self.success_repo)}): {self.success_repo}")
-        print(f"Failed repos (Totally {len(self.failed_repo)}): {self.failed_repo}")
-        print(f"No effect repos (Totally {len(self.no_effect_repo)}): {self.no_effect_repo}")
-        print(f"Repos that has new updates in the remote server (Totally {len(self.repo_that_remote_has_new_update)}): {self.repo_that_remote_has_new_update}")
+        print(f"Repositories older than the remote ones: (Totally {len(self.repo_that_remote_has_new_update)}): {self.repo_that_remote_has_new_update}")
+        print(f"Successfully updated repositories (Totally {len(self.success_repo)}): {self.success_repo}")
+        print(f"FFailed to update repositories (Totally {len(self.failed_repo)}): {self.failed_repo}")
+        print(f"Repositories with no updates (Totally {len(self.no_effect_repo)}): {self.no_effect_repo}")
 
 
 # Testing unit: 
