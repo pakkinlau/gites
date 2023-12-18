@@ -55,17 +55,16 @@ class GitPullManager:
                 self.failed_repo.append(repo)
                 print("Git status command failed.")
                 continue # type: ignore
-            # Case 2: 'Updating' - indicates that there is new updates in the remote server.
-            if "Updating" in stdout:
-                self.success_repo.append(repo)
-                print("This repo has detected diff and has already pulled. Proceed the next repo.")
-                continue # type: ignore
             # Case 2: 'Your branch is up to date'
             if "Already up-to-date" in stdout:
                 self.no_effect_repo.append(repo)
                 print("This repo has no diff detected. Proceed the next repo.")
                 continue # type: ignore
-
+            # Case 3: 'changed' - indicates that there is new updates in the remote server.
+            if "changed" in stdout:
+                self.success_repo.append(repo)
+                print("This repo has detected diff and has already pulled. Proceed the next repo.")
+                continue # type: ignore
             print("=" * 72)
 
             
