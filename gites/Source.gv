@@ -1,0 +1,37 @@
+
+digraph G {
+    concentrate = true;
+
+    rankdir = TB;
+    node [style=filled,fillcolor="#ffffff",fontcolor="#000000",fontname=Helvetica,fontsize=10];
+
+    gites_cli [fillcolor="#964040",fontcolor="#ffffff",label="gites.cli"];
+    gites_subpackage [fillcolor="#f31616",fontcolor="#ffffff",label="gites\.\nsubpackage"];
+    gites_subpackage__subprocess_handler [fillcolor="#e72222",fontcolor="#ffffff",label="gites\.\nsubpackage\.\n_subprocess_handler"];
+    gites_subpackage__timing [fillcolor="#c24747",fontcolor="#ffffff",label="gites\.\nsubpackage\.\n_timing"];
+    gites_subpackage_config_json_handler [fillcolor="#ce3b3b",fontcolor="#ffffff",label="gites\.\nsubpackage\.\nconfig_json_handler"];
+    gites_subpackage_creat_repo_manager [fillcolor="#ac4949",fontcolor="#ffffff",label="gites\.\nsubpackage\.\ncreat_repo_manager"];
+    gites_subpackage_datastore_json_handler [fillcolor="#f30c0c",fontcolor="#ffffff",label="gites\.\nsubpackage\.\ndatastore_json_handler"];
+    gites_subpackage_git_push_manager [fillcolor="#a83838",fontcolor="#ffffff",label="gites\.\nsubpackage\.\ngit_push_manager"];
+    gites_subpackage_pull_manager [fillcolor="#a83838",fontcolor="#ffffff",label="gites\.\nsubpackage\.\npull_manager"];
+    gites_subpackage_repo_cloner [fillcolor="#a13535",fontcolor="#ffffff",label="gites\.\nsubpackage\.\nrepo_cloner"];
+    gites_tests_test_datastore_json_handler [fillcolor="#ac4949",fontcolor="#ffffff",label="gites\.\ntests\.\ntest_datastore_json_handler"];
+    gites_subpackage -> gites_cli [fillcolor="#f31616"];
+    gites_subpackage -> gites_tests_test_datastore_json_handler [fillcolor="#f31616",minlen="2"];
+    gites_subpackage__subprocess_handler -> gites_subpackage_creat_repo_manager [fillcolor="#e72222",weight="2"];
+    gites_subpackage__subprocess_handler -> gites_subpackage_git_push_manager [fillcolor="#e72222",weight="2"];
+    gites_subpackage__subprocess_handler -> gites_subpackage_pull_manager [fillcolor="#e72222",weight="2"];
+    gites_subpackage__subprocess_handler -> gites_subpackage_repo_cloner [fillcolor="#e72222",weight="2"];
+    gites_subpackage__timing -> gites_subpackage_repo_cloner [fillcolor="#c24747",weight="2"];
+    gites_subpackage_config_json_handler -> gites_cli [fillcolor="#ce3b3b",minlen="2"];
+    gites_subpackage_config_json_handler -> gites_subpackage_datastore_json_handler [fillcolor="#ce3b3b",weight="2"];
+    gites_subpackage_datastore_json_handler -> gites_subpackage_creat_repo_manager [fillcolor="#f30c0c",weight="2"];
+    gites_subpackage_datastore_json_handler -> gites_subpackage_git_push_manager [fillcolor="#f30c0c",weight="2"];
+    gites_subpackage_datastore_json_handler -> gites_subpackage_pull_manager [fillcolor="#f30c0c",weight="2"];
+    gites_subpackage_datastore_json_handler -> gites_subpackage_repo_cloner [fillcolor="#f30c0c",weight="2"];
+    gites_subpackage_datastore_json_handler -> gites_tests_test_datastore_json_handler [fillcolor="#f30c0c",minlen="2"];
+    gites_subpackage_git_push_manager -> gites_cli [fillcolor="#a83838",minlen="2"];
+    gites_subpackage_pull_manager -> gites_cli [fillcolor="#a83838",minlen="2"];
+    gites_subpackage_repo_cloner -> gites_cli [fillcolor="#a13535",minlen="2"];
+}
+
