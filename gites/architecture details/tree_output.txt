@@ -1,0 +1,43 @@
+|-- Source.gv
+|-- Source.gv.pdf
+|-- Source.gv.png
+|-- __init__.py
+|-- __pycache__/
+|   |-- __init__.cpython-310.pyc
+|-- architecture details/
+|-- classes_gites.png
+|-- classes_gites.puml
+|-- cli.py
+|-- output.dot
+|-- packages_gites.png
+|-- packages_gites.puml
+|-- subpackage/
+|   |-- Legacy files/
+|   |   |-- old.listpush.py
+|   |-- My hooks/
+|   |   |-- pre-commit
+|   |-- __init__.py
+|   |-- __pycache__/
+|   |   |-- __init__.cpython-310.pyc
+|   |   |-- config_json_handler.cpython-310.pyc
+|   |   |-- datastore_json_handler.cpython-310.pyc
+|   |   |-- test_datastore_json_handler.cpython-310-pytest-7.4.2.pyc
+|   |-- _subprocess_handler.py
+|   |-- _timing.py
+|   |-- config_json_handler.py
+|   |-- creat_repo_manager.py
+|   |-- datastore_json_handler.py
+|   |-- example.json
+|   |-- git_push_manager.py
+|   |-- gites_subpackage_repo_cloner.svg
+|   |-- package_setup.json
+|   |-- pull_manager.py
+|   |-- repo_cloner.py
+|   |-- util.py
+|-- tests/
+|   |-- __init__.py
+|   |-- __pycache__/
+|   |   |-- __init__.cpython-310.pyc
+|   |   |-- test_datastore_json_handler.cpython-310-pytest-7.4.2.pyc
+|   |   |-- test_datastore_json_handler.cpython-310.pyc
+|   |-- test_datastore_json_handler.py
