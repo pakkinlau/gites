@@ -1,0 +1,46 @@
+@startuml packages_gites
+set namespaceSeparator none
+package "gites" as gites {
+}
+package "gites.cli" as gites.cli {
+}
+package "gites.subpackage" as gites.subpackage {
+}
+package "gites.subpackage._subprocess_handler" as gites.subpackage._subprocess_handler {
+}
+package "gites.subpackage._timing" as gites.subpackage._timing {
+}
+package "gites.subpackage.config_json_handler" as gites.subpackage.config_json_handler {
+}
+package "gites.subpackage.creat_repo_manager" as gites.subpackage.creat_repo_manager {
+}
+package "gites.subpackage.datastore_json_handler" as gites.subpackage.datastore_json_handler {
+}
+package "gites.subpackage.git_push_manager" as gites.subpackage.git_push_manager {
+}
+package "gites.subpackage.pull_manager" as gites.subpackage.pull_manager {
+}
+package "gites.subpackage.repo_cloner" as gites.subpackage.repo_cloner {
+}
+package "gites.subpackage.util" as gites.subpackage.util {
+}
+package "gites.tests" as gites.tests {
+}
+package "gites.tests.test_datastore_json_handler" as gites.tests.test_datastore_json_handler {
+}
+gites.cli --> gites.subpackage.config_json_handler
+gites.cli --> gites.subpackage.git_push_manager
+gites.cli --> gites.subpackage.pull_manager
+gites.cli --> gites.subpackage.repo_cloner
+gites.subpackage.creat_repo_manager --> gites.subpackage._subprocess_handler
+gites.subpackage.creat_repo_manager --> gites.subpackage.datastore_json_handler
+gites.subpackage.creat_repo_manager --> gites.subpackage.util
+gites.subpackage.datastore_json_handler --> gites.subpackage.config_json_handler
+gites.subpackage.git_push_manager --> gites.subpackage._subprocess_handler
+gites.subpackage.git_push_manager --> gites.subpackage.datastore_json_handler
+gites.subpackage.pull_manager --> gites.subpackage._subprocess_handler
+gites.subpackage.pull_manager --> gites.subpackage.datastore_json_handler
+gites.subpackage.repo_cloner --> gites.subpackage._subprocess_handler
+gites.subpackage.repo_cloner --> gites.subpackage._timing
+gites.subpackage.repo_cloner --> gites.subpackage.datastore_json_handler
+@enduml

@@ -1,0 +1,80 @@
+@startuml classes_gites
+set namespaceSeparator none
+class "ConfigJSONHandler" as gites.subpackage.config_json_handler.ConfigJSONHandler {
+  config_data : dict
+  config_json_path
+  default_datastore_json_name
+  gites_datastore_json_location
+  json_initial_setup_check
+  root_dir_of_gites_datastore_json
+  check_initial_setup_then_get_datastore_json_address()
+}
+class "CreateRepoManager" as gites.subpackage.creat_repo_manager.CreateRepoManager {
+  datastore_json_handler
+  new_created_repo_folder_name
+  new_created_repo_url
+  check_remote_origin()
+  initialize_repo()
+  run(cmd)
+}
+class "DatastoreJSONHandler" as gites.subpackage.datastore_json_handler.DatastoreJSONHandler {
+  config_json_handler
+  data : dict
+  gites_datastore_json_location
+  list_of_repo_details
+  root_dir
+  get_root_directory()
+  load_datastore_json()
+}
+class "GitPullManager" as gites.subpackage.pull_manager.GitPullManager {
+  datastore_json_handler
+  failed_repo : list
+  no_effect_repo : list
+  repo_list
+  repo_that_remote_has_new_update : list
+  root_folder
+  success_repo : list
+  lpull()
+}
+class "GitPushManager" as gites.subpackage.git_push_manager.GitPushManager {
+  datastore_json_handler
+  failed_repo : list
+  no_effect_repo : list
+  repo_list
+  repo_that_remote_has_new_update : list
+  root_folder
+  success_repo : list
+  lpush()
+}
+class "RepoCloner" as gites.subpackage.repo_cloner.RepoCloner {
+  datastore_json_handler
+  failed : list
+  list_of_repo_details
+  no_effect : list
+  root_folder
+  success : list
+  clone_repo(remote_url, local_path)
+  clone_repositories()
+  lclone()
+  print_summary()
+}
+class "TestConfigJSONHandler" as gites.tests.test_datastore_json_handler.TestConfigJSONHandler {
+  gites_datastore_json_location : str
+}
+class "TestDatastoreJSONHandler" as gites.tests.test_datastore_json_handler.TestDatastoreJSONHandler {
+  mock_config : AsyncMock, MagicMock, dict
+  mock_datastore_data : dict
+  setUp()
+  test_get_root_directory_linux()
+  test_get_root_directory_windows()
+  test_load_datastore_json()
+}
+class "_SubprocessHandler" as gites.subpackage._subprocess_handler._SubprocessHandler {
+  run(command, running_location)
+}
+gites.subpackage.config_json_handler.ConfigJSONHandler --* gites.subpackage.datastore_json_handler.DatastoreJSONHandler : config_json_handler
+gites.subpackage.datastore_json_handler.DatastoreJSONHandler --* gites.subpackage.creat_repo_manager.CreateRepoManager : datastore_json_handler
+gites.subpackage.datastore_json_handler.DatastoreJSONHandler --* gites.subpackage.git_push_manager.GitPushManager : datastore_json_handler
+gites.subpackage.datastore_json_handler.DatastoreJSONHandler --* gites.subpackage.pull_manager.GitPullManager : datastore_json_handler
+gites.subpackage.datastore_json_handler.DatastoreJSONHandler --* gites.subpackage.repo_cloner.RepoCloner : datastore_json_handler
+@enduml
