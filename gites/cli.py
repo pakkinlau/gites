@@ -196,9 +196,18 @@ def cli_view(args: argparse.Namespace) -> int:
     return 0
 
 
-def cli_where(_args: argparse.Namespace) -> int:
+def cli_where(args: argparse.Namespace) -> int:
     try:
-        name, selected = active_dir_config()
+        requested_name = getattr(args, "name", None)
+        if requested_name:
+            config = load_user_config()
+            dirs = config.get("dirs", {})
+            if requested_name not in dirs:
+                raise ValueError(f"unknown dir: {requested_name}")
+            name = requested_name
+            selected = dirs[requested_name]
+        else:
+            name, selected = active_dir_config()
     except ValueError as exc:
         print(str(exc))
         print(f"Config: {user_config_path()}")
@@ -303,9 +312,11 @@ def build_parser() -> argparse.ArgumentParser:
     use.set_defaults(func=cli_use)
 
     where = subparsers.add_parser("where", help="Show the active saved directory")
+    where.add_argument("name", nargs="?", help="Saved dir name. Defaults to the active dir.")
     where.set_defaults(func=cli_where)
 
     push = subparsers.add_parser("push", help="Preview or apply checkpoint for the active directory")
+    push.add_argument("name", nargs="?", help="Saved dir name. Defaults to the active dir.")
     push.add_argument("-m", "--message", help="Commit message. If omitted, push runs as a dry-run.")
     push.add_argument("--dry-run", action="store_true", help="Preview even when a message is provided")
     push.add_argument("--root", help="Override active root directory")
@@ -319,6 +330,13 @@ def build_parser() -> argparse.ArgumentParser:
     view.add_argument("--branch", help="Override branch safety check")
     view.add_argument("--max-file-size-mb", type=int)
     view.set_defaults(func=cli_view)
+
+    status = subparsers.add_parser("status", help="Alias for view")
+    status.add_argument("name", nargs="?", help="Saved dir name. Defaults to the active dir.")
+    status.add_argument("--root", help="Override saved root directory")
+    status.add_argument("--branch", help="Override branch safety check")
+    status.add_argument("--max-file-size-mb", type=int)
+    status.set_defaults(func=cli_view)
 
     plan = subparsers.add_parser("plan", help="Inspect repositories without changing them")
     _add_repo_selection_args(plan)
@@ -370,6 +388,7 @@ def _add_safety_args(parser: argparse.ArgumentParser) -> None:
 
 
 def main(argv: list[str] | None = None) -> int:
+    argv = _rewrite_saved_dir_shortcut(argv)
     parser = build_parser()
     args = parser.parse_args(argv)
     try:
@@ -377,6 +396,37 @@ def main(argv: list[str] | None = None) -> int:
     except Exception as exc:
         print(f"Error: {exc}")
         return 1
+
+
+def _rewrite_saved_dir_shortcut(argv: list[str] | None) -> list[str] | None:
+    if argv is None:
+        import sys
+
+        argv = sys.argv[1:]
+    if not argv or argv[0].startswith("-"):
+        return argv
+    commands = {
+        "init",
+        "dirs",
+        "use",
+        "where",
+        "push",
+        "view",
+        "status",
+        "plan",
+        "sync",
+        "ledger",
+        "config",
+    }
+    if argv[0] in commands:
+        return argv
+    try:
+        config = load_user_config()
+        if argv[0] in config.get("dirs", {}):
+            return ["view", *argv]
+    except Exception:
+        return argv
+    return argv
 
 
 if __name__ == "__main__":
