@@ -23,6 +23,13 @@ Typical use cases include multi-repo project families, research/code archives,
 documentation surface repos, generated repo sets, and teams that want some of
 the operational convenience of a monorepo without merging repositories together.
 
+The name carries the idea: Git plus easy, and also `gites` as in small houses
+or lodgings. A `gites` root is meant to feel like a modest home for related
+repositories: each repo keeps its own room, while the front door gives you one
+place to check what changed and send the whole house home safely.
+
+![A small stone house representing a gites root for related repositories.](docs/assets/gites-house.jpg)
+
 ## Install
 
 For regular CLI use, `pipx` is recommended:
