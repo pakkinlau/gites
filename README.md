@@ -1,8 +1,27 @@
 # Gites
 
-Gites is a local-first command line tool for deterministic multi-repo checkpointing.
+Gites is a safe multi-repo Git CLI for developers who manage many related
+repositories outside a monorepo. It gives a repo family one short name, shows a
+single table of branch/dirty/ahead/behind state, and can commit and push the
+eligible repositories with one deterministic checkpoint command.
 
-It is designed for a root directory that contains many Git repositories. Gites previews repo state, refuses unsafe repositories, commits with an explicit deterministic message, pushes safely, and records each run in a local ignored ledger.
+Use it when you have a directory full of Git repos and need a practical way to
+inspect, checkpoint, and push them without hand-running `git status`, `git
+commit`, and `git push` in every folder.
+
+## Why Gites
+
+- One command shows a table for every repo in a saved root.
+- One command previews or applies a bulk Git checkpoint.
+- Unsafe repos are refused instead of force-pushed or silently modified.
+- Large repo roots are inspected in parallel with timeouts.
+- Local run ledgers stay ignored and private.
+- Works well for WSL users who keep large Git repo families on native Linux
+  paths instead of slow `/mnt/c/...` checkouts.
+
+Typical use cases include multi-repo project families, research/code archives,
+documentation surface repos, generated repo sets, and teams that want some of
+the operational convenience of a monorepo without merging repositories together.
 
 ## Install
 

@@ -5,21 +5,34 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "gites"
 version = "0.5.6"
-description = "Deterministic local multi-repo checkpointing for repo families."
+description = "Safe multi-repo Git status, checkpoint, commit, and push for repo families."
 readme = "README.md"
 requires-python = ">=3.9"
 license = "MIT"
 authors = [
   {name = "Pak Kin LAU", email = "kinlau529@gmail.com"}
 ]
+keywords = [
+  "git",
+  "multi-repo",
+  "monorepo",
+  "repository-management",
+  "cli",
+  "wsl",
+  "checkpoint",
+]
 classifiers = [
   "Development Status :: 4 - Beta",
+  "Environment :: Console",
   "Intended Audience :: Developers",
+  "Operating System :: OS Independent",
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
+  "Topic :: Software Development :: Version Control :: Git",
+  "Topic :: Utilities",
 ]
 dependencies = []
 
