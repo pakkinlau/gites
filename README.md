@@ -6,6 +6,15 @@ It is designed for a root directory that contains many Git repositories. Gites p
 
 ## Install
 
+For regular CLI use, `pipx` is recommended:
+
+```bash
+pipx install gites
+pipx upgrade gites --pip-args="--no-cache-dir"
+```
+
+`pip` also works:
+
 ```bash
 pip install gites
 ```
@@ -18,17 +27,20 @@ pip install -e .
 
 ## Simple Workflow
 
+The normal workflow is to register a repo root once, give it a short name, and
+then operate on that named object.
+
 Register the current directory as a repo root:
 
 ```bash
-cd ~/All_github_repo
-gites init
+cd ~/repos/All_hl_repo
+gites init --name hl --branch main
 ```
 
-Or register a Windows-mounted repo root from WSL:
+Or register an explicit path:
 
 ```bash
-gites init /mnt/c/Documents/All_github_repo --name win --branch main
+gites init ~/repos/All_hl_repo --name hl --branch main
 ```
 
 List saved roots:
@@ -40,44 +52,83 @@ gites dirs
 Switch active root:
 
 ```bash
-gites use win
+gites use hl
 ```
 
 Show the current repo-state table for a saved root:
 
 ```bash
 gites view
-gites view win
-gites status win
-gites win
+gites view hl
+gites status hl
+gites hl
 ```
 
-Large repo roots can be slow on WSL paths such as `/mnt/c/...`. `view`,
-`status`, and object shortcuts inspect repositories in parallel, show progress
-by default, and skip expensive untracked-file enumeration unless requested:
+`view`, `status`, and object shortcuts inspect repositories in parallel, show
+progress by default, use 15 workers, apply a 60 second per-Git-command timeout,
+and skip expensive untracked-file enumeration unless requested:
 
 ```bash
-gites view win --jobs 15 --timeout 60
-gites view win --untracked
-gites view win --no-progress
+gites view hl
+gites view hl --untracked
+gites view hl --no-progress
+gites view hl --jobs 30 --timeout 120
 ```
 
 Preview what would be pushed:
 
 ```bash
 gites push
-gites push win
+gites push hl
 ```
 
 Apply with a deterministic commit message:
 
 ```bash
-gites push -m "chore: checkpoint repo family 2026-05-11"
+gites push hl -m "chore: checkpoint repo family 2026-05-11"
 ```
 
 The saved directory config lives outside the repo at `~/.config/gites/config.json`.
 
+## Table Output
+
+The status table is meant to be the main decision surface:
+
+```text
+repo                  branch  ahead  behind  dirty  untracked  action  reason
+--------------------  ------  -----  ------  -----  ---------  ------  ------------------
+archive-example       main    0      0       no     no         noop    working tree clean
+surface-example       main    1      0       yes    no         sync
+local-only-example    main    0      0       no     no         refuse  missing origin remote
+```
+
+Actions:
+
+- `noop`: clean and already aligned with upstream
+- `sync`: eligible for commit and push
+- `refuse`: not safe to modify automatically; read the reason column
+
+`gites` refuses local-only repositories because it cannot safely push them until
+they have an `origin` remote and an upstream branch.
+
+## WSL Guidance
+
+For large repo roots on WSL, prefer native Linux paths such as:
+
+```bash
+~/repos/All_hl_repo
+```
+
+Avoid using `/mnt/c/...` as the active root for very large repositories.
+Windows-mounted paths can make `git status` and `git commit` slow because Git
+must perform many metadata checks through the WSL-to-Windows filesystem bridge.
+The same repo can be much faster when cloned or moved under the native WSL
+filesystem.
+
 ## Explicit Workflow
+
+The lower-level `plan` and `sync` commands remain available for scripts and
+one-off roots. Most interactive use should prefer `view` and `push`.
 
 Preview repositories under a root directory:
 
