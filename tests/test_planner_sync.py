@@ -4,7 +4,10 @@ import subprocess
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
+from gites.cli import main
+from gites.config import load_user_config
 from gites.models import SyncOptions
 from gites.planner import build_plan
 from gites.sync import run_sync
@@ -113,6 +116,20 @@ class PlannerSyncTests(unittest.TestCase):
 
         with self.assertRaises(ValueError):
             run_sync(SyncOptions(root=self.root, branch="main", message=None, apply=True))
+
+    def test_simple_init_use_and_push_preview(self) -> None:
+        self.create_repo()
+        config_home = self.root / "config-home"
+
+        with patch.dict("os.environ", {"GITES_CONFIG_HOME": str(config_home)}):
+            self.assertEqual(main(["init", str(self.root), "--name", "local"]), 0)
+            config = load_user_config()
+            self.assertEqual(config["active"], "local")
+            self.assertEqual(config["dirs"]["local"]["path"], str(self.root))
+
+            self.assertEqual(main(["dirs"]), 0)
+            self.assertEqual(main(["where"]), 0)
+            self.assertEqual(main(["push"]), 0)
 
 
 if __name__ == "__main__":

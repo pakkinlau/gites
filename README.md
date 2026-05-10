@@ -16,7 +16,48 @@ For local development:
 pip install -e .
 ```
 
-## Core Workflow
+## Simple Workflow
+
+Register the current directory as a repo root:
+
+```bash
+cd ~/All_github_repo
+gites init
+```
+
+Or register a Windows-mounted repo root from WSL:
+
+```bash
+gites init /mnt/c/Documents/All_github_repo --name win --branch main
+```
+
+List saved roots:
+
+```bash
+gites dirs
+```
+
+Switch active root:
+
+```bash
+gites use win
+```
+
+Preview what would be pushed:
+
+```bash
+gites push
+```
+
+Apply with a deterministic commit message:
+
+```bash
+gites push -m "chore: checkpoint repo family 2026-05-11"
+```
+
+The saved directory config lives outside the repo at `~/.config/gites/config.json`.
+
+## Explicit Workflow
 
 Preview repositories under a root directory:
 

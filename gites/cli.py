@@ -5,7 +5,19 @@ import json
 from datetime import date
 from pathlib import Path
 
-from .config import default_root, family_from_manifest, load_manifest, root_from_manifest, validate_manifest
+from .config import (
+    active_dir_config,
+    add_dir,
+    default_root,
+    family_from_manifest,
+    load_manifest,
+    load_user_config,
+    remove_dir,
+    root_from_manifest,
+    set_active_dir,
+    user_config_path,
+    validate_manifest,
+)
 from .ledger import find_run, list_runs
 from .models import SyncOptions
 from .output import render_plan, render_run
@@ -19,6 +31,13 @@ def _resolve_root(args: argparse.Namespace) -> Path:
     if getattr(args, "manifest", None):
         return root_from_manifest(Path(args.manifest)).resolve()
     return default_root().resolve()
+
+
+def _resolve_simple_root(args: argparse.Namespace) -> tuple[str, Path, str]:
+    name, selected = active_dir_config()
+    root = Path(getattr(args, "root", None) or selected["path"]).expanduser().resolve()
+    branch = getattr(args, "branch", None) or selected.get("branch") or "main"
+    return name, root, branch
 
 
 def _options_from_args(args: argparse.Namespace, apply: bool = False) -> SyncOptions:
@@ -81,6 +100,88 @@ def cli_sync(args: argparse.Namespace) -> int:
     print(render_run(result))
     if any(repo.status in {"failed", "refused"} for repo in result.repos):
         return 1
+    return 0
+
+
+def cli_init(args: argparse.Namespace) -> int:
+    name = args.name
+    path = Path(args.path or Path.cwd()).expanduser().resolve()
+    config_path = add_dir(name=name, path=path, branch=args.branch, make_active=True)
+    print(f"Initialized gites dir '{name}' -> {path}")
+    print(f"Active dir: {name}")
+    print(f"Config: {config_path}")
+    return 0
+
+
+def cli_dirs_list(_args: argparse.Namespace) -> int:
+    config = load_user_config()
+    active = config.get("active")
+    dirs = config.get("dirs", {})
+    if not dirs:
+        print("No dirs configured. Run: gites init")
+        return 0
+    for name in sorted(dirs):
+        marker = "*" if name == active else " "
+        item = dirs[name]
+        print(f"{marker} {name}  {item.get('path')}  branch={item.get('branch', 'main')}")
+    return 0
+
+
+def cli_dirs_add(args: argparse.Namespace) -> int:
+    path = Path(args.path).expanduser().resolve()
+    config_path = add_dir(name=args.name, path=path, branch=args.branch, make_active=not args.no_use)
+    print(f"Added dir '{args.name}' -> {path}")
+    if not args.no_use:
+        print(f"Active dir: {args.name}")
+    print(f"Config: {config_path}")
+    return 0
+
+
+def cli_dirs_remove(args: argparse.Namespace) -> int:
+    config_path = remove_dir(args.name)
+    print(f"Removed dir '{args.name}'")
+    print(f"Config: {config_path}")
+    return 0
+
+
+def cli_use(args: argparse.Namespace) -> int:
+    config_path = set_active_dir(args.name)
+    print(f"Active dir: {args.name}")
+    print(f"Config: {config_path}")
+    return 0
+
+
+def cli_push(args: argparse.Namespace) -> int:
+    name, root, branch = _resolve_simple_root(args)
+    message = args.message
+    apply = bool(message) and not args.dry_run
+    options = SyncOptions(
+        root=root,
+        branch=branch,
+        message=message,
+        apply=apply,
+        max_file_size_mb=args.max_file_size_mb or 25,
+    )
+    result = run_sync(options)
+    mode = "apply" if apply else "dry-run"
+    print(f"dir: {name}  root: {root}  branch: {branch}  mode: {mode}")
+    if not apply:
+        print("No commit was made. Add -m/--message to apply.")
+    print(render_run(result))
+    if any(repo.status in {"failed", "refused"} for repo in result.repos):
+        return 1
+    return 0
+
+
+def cli_where(_args: argparse.Namespace) -> int:
+    try:
+        name, selected = active_dir_config()
+    except ValueError as exc:
+        print(str(exc))
+        print(f"Config: {user_config_path()}")
+        return 1
+    print(f"{name}  {selected.get('path')}  branch={selected.get('branch', 'main')}")
+    print(f"Config: {user_config_path()}")
     return 0
 
 
@@ -152,6 +253,42 @@ def cli_config_init(args: argparse.Namespace) -> int:
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Deterministic local multi-repo checkpointing")
     subparsers = parser.add_subparsers(dest="command", required=True)
+
+    init_simple = subparsers.add_parser("init", help="Register the current directory as a gites repo root")
+    init_simple.add_argument("path", nargs="?", help="Repo root directory. Defaults to current directory.")
+    init_simple.add_argument("-n", "--name", default="default", help="Short name for this directory")
+    init_simple.add_argument("--branch", default="main", help="Default branch safety check")
+    init_simple.set_defaults(func=cli_init)
+
+    dirs = subparsers.add_parser("dirs", help="Manage saved repo root directories")
+    dirs_subparsers = dirs.add_subparsers(dest="dirs_command")
+    dirs.set_defaults(func=cli_dirs_list)
+    dirs_list = dirs_subparsers.add_parser("list", help="List saved directories")
+    dirs_list.set_defaults(func=cli_dirs_list)
+    dirs_add = dirs_subparsers.add_parser("add", help="Add a saved directory")
+    dirs_add.add_argument("name")
+    dirs_add.add_argument("path")
+    dirs_add.add_argument("--branch", default="main")
+    dirs_add.add_argument("--no-use", action="store_true", help="Do not make this directory active")
+    dirs_add.set_defaults(func=cli_dirs_add)
+    dirs_remove = dirs_subparsers.add_parser("remove", help="Remove a saved directory")
+    dirs_remove.add_argument("name")
+    dirs_remove.set_defaults(func=cli_dirs_remove)
+
+    use = subparsers.add_parser("use", help="Set the active saved directory")
+    use.add_argument("name")
+    use.set_defaults(func=cli_use)
+
+    where = subparsers.add_parser("where", help="Show the active saved directory")
+    where.set_defaults(func=cli_where)
+
+    push = subparsers.add_parser("push", help="Preview or apply checkpoint for the active directory")
+    push.add_argument("-m", "--message", help="Commit message. If omitted, push runs as a dry-run.")
+    push.add_argument("--dry-run", action="store_true", help="Preview even when a message is provided")
+    push.add_argument("--root", help="Override active root directory")
+    push.add_argument("--branch", help="Override branch safety check")
+    push.add_argument("--max-file-size-mb", type=int)
+    push.set_defaults(func=cli_push)
 
     plan = subparsers.add_parser("plan", help="Inspect repositories without changing them")
     _add_repo_selection_args(plan)

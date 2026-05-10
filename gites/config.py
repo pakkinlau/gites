@@ -6,8 +6,105 @@ from pathlib import Path
 from typing import Any
 
 
+APP_NAME = "gites"
+
+
 def default_root() -> Path:
     return Path.cwd()
+
+
+def user_config_dir() -> Path:
+    override = os.environ.get("GITES_CONFIG_HOME")
+    if override:
+        return Path(override).expanduser()
+    xdg_config_home = os.environ.get("XDG_CONFIG_HOME")
+    if xdg_config_home:
+        return Path(xdg_config_home).expanduser() / APP_NAME
+    return Path.home() / ".config" / APP_NAME
+
+
+def user_config_path() -> Path:
+    return user_config_dir() / "config.json"
+
+
+def default_user_config() -> dict[str, Any]:
+    return {
+        "version": 1,
+        "active": None,
+        "dirs": {},
+        "defaults": {
+            "branch": "main",
+            "message_template": "chore: checkpoint {date}",
+        },
+    }
+
+
+def load_user_config(path: Path | None = None) -> dict[str, Any]:
+    config_path = path or user_config_path()
+    if not config_path.exists():
+        return default_user_config()
+    with config_path.open("r", encoding="utf-8") as handle:
+        data = json.load(handle)
+    if not isinstance(data, dict):
+        raise ValueError(f"user config must be a JSON object: {config_path}")
+    config = default_user_config()
+    config.update(data)
+    if not isinstance(config.get("dirs"), dict):
+        raise ValueError("user config field 'dirs' must be an object")
+    if not isinstance(config.get("defaults"), dict):
+        raise ValueError("user config field 'defaults' must be an object")
+    return config
+
+
+def save_user_config(config: dict[str, Any], path: Path | None = None) -> Path:
+    config_path = path or user_config_path()
+    config_path.parent.mkdir(parents=True, exist_ok=True)
+    with config_path.open("w", encoding="utf-8") as handle:
+        json.dump(config, handle, indent=2, sort_keys=True)
+        handle.write("\n")
+    return config_path
+
+
+def add_dir(name: str, path: Path, branch: str = "main", make_active: bool = True) -> Path:
+    config = load_user_config()
+    resolved = path.expanduser().resolve()
+    config["dirs"][name] = {
+        "path": str(resolved),
+        "branch": branch,
+    }
+    if make_active:
+        config["active"] = name
+    return save_user_config(config)
+
+
+def remove_dir(name: str) -> Path:
+    config = load_user_config()
+    config["dirs"].pop(name, None)
+    if config.get("active") == name:
+        config["active"] = None
+    return save_user_config(config)
+
+
+def set_active_dir(name: str) -> Path:
+    config = load_user_config()
+    if name not in config["dirs"]:
+        raise ValueError(f"unknown dir: {name}")
+    config["active"] = name
+    return save_user_config(config)
+
+
+def active_dir_config() -> tuple[str, dict[str, Any]]:
+    config = load_user_config()
+    active = config.get("active")
+    if not active:
+        raise ValueError("no active dir. Run 'gites init' or 'gites use <name>' first")
+    dirs = config.get("dirs", {})
+    if active not in dirs:
+        raise ValueError(f"active dir is missing from config: {active}")
+    selected = dirs[active]
+    if not isinstance(selected, dict) or not selected.get("path"):
+        raise ValueError(f"active dir is invalid: {active}")
+    return active, selected
 
 
 def load_manifest(path: Path) -> dict[str, Any]:
