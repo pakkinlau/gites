@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import sys
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
 from .discovery import discover_repositories
@@ -9,7 +11,7 @@ from .models import ChangedFile, PlanEntry, RepoState, SyncOptions
 UNMERGED_CODES = {"DD", "AU", "UD", "UA", "DU", "AA", "UU"}
 
 
-def inspect_repo(path: Path, git: GitBackend | None = None) -> RepoState:
+def inspect_repo(path: Path, git: GitBackend | None = None, include_untracked: bool = True) -> RepoState:
     git = git or GitBackend()
     errors: list[str] = []
 
@@ -36,7 +38,10 @@ def inspect_repo(path: Path, git: GitBackend | None = None) -> RepoState:
         else:
             errors.append(counts.output or "failed to compare branch with upstream")
 
-    status = git.run(path, ["status", "--porcelain=v1"])
+    status_args = ["status", "--porcelain=v1"]
+    if not include_untracked:
+        status_args.append("--untracked-files=no")
+    status = git.run(path, status_args)
     changed_files: list[ChangedFile] = []
     conflicts = False
     untracked = False
@@ -79,23 +84,60 @@ def inspect_repo(path: Path, git: GitBackend | None = None) -> RepoState:
 
 
 def build_plan(options: SyncOptions, git: GitBackend | None = None) -> list[PlanEntry]:
-    git = git or GitBackend()
-    entries: list[PlanEntry] = []
     selected = set(options.repo_names)
-    for repo_path in discover_repositories(options.root):
-        if selected and repo_path.name not in selected:
-            continue
-        repo = inspect_repo(repo_path, git=git)
-        reasons = preflight_reasons(repo, options)
-        if reasons:
-            action = "refuse"
-        elif not repo.dirty:
-            action = "noop"
-            reasons = ("working tree clean",)
-        else:
-            action = "sync"
-        entries.append(PlanEntry(repo=repo, action=action, reasons=tuple(reasons)))
+    repo_paths = [path for path in discover_repositories(options.root) if not selected or path.name in selected]
+    if options.progress:
+        print(f"Inspecting {len(repo_paths)} repos with {max(1, options.jobs)} worker(s)...", file=sys.stderr)
+
+    if len(repo_paths) <= 1 or options.jobs <= 1:
+        entries = []
+        local_git = git or GitBackend(timeout=options.git_timeout_seconds)
+        for index, repo_path in enumerate(repo_paths, start=1):
+            entries.append(_plan_one(repo_path, options, local_git))
+            if options.progress:
+                print(f"[{index}/{len(repo_paths)}] {repo_path.name}", file=sys.stderr)
+        return entries
+
+    by_name: dict[str, PlanEntry] = {}
+    max_workers = max(1, min(options.jobs, len(repo_paths)))
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        futures = {
+            executor.submit(_plan_one, repo_path, options, GitBackend(timeout=options.git_timeout_seconds)): repo_path
+            for repo_path in repo_paths
+        }
+        completed = 0
+        for future in as_completed(futures):
+            repo_path = futures[future]
+            completed += 1
+            try:
+                entry = future.result()
+            except Exception as exc:
+                repo = RepoState(
+                    name=repo_path.name,
+                    path=repo_path,
+                    is_git_repo=True,
+                    errors=(str(exc),),
+                )
+                entry = PlanEntry(repo=repo, action="refuse", reasons=(str(exc),))
+            by_name[repo_path.name] = entry
+            if options.progress:
+                print(f"[{completed}/{len(repo_paths)}] {repo_path.name} -> {entry.action}", file=sys.stderr)
+
+    entries = [by_name[path.name] for path in repo_paths if path.name in by_name]
     return entries
+
+
+def _plan_one(repo_path: Path, options: SyncOptions, git: GitBackend) -> PlanEntry:
+    repo = inspect_repo(repo_path, git=git, include_untracked=options.include_untracked)
+    reasons = preflight_reasons(repo, options)
+    if reasons:
+        action = "refuse"
+    elif not repo.dirty:
+        action = "noop"
+        reasons = ["working tree clean"]
+    else:
+        action = "sync"
+    return PlanEntry(repo=repo, action=action, reasons=tuple(reasons))
 
 
 def preflight_reasons(repo: RepoState, options: SyncOptions) -> list[str]:

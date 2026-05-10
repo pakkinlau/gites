@@ -130,12 +130,13 @@ class PlannerSyncTests(unittest.TestCase):
             self.assertEqual(main(["dirs"]), 0)
             self.assertEqual(main(["where"]), 0)
             self.assertEqual(main(["where", "local"]), 0)
-            self.assertEqual(main(["view"]), 0)
-            self.assertEqual(main(["view", "local"]), 0)
-            self.assertEqual(main(["status", "local"]), 0)
-            self.assertEqual(main(["local"]), 0)
-            self.assertEqual(main(["push"]), 0)
-            self.assertEqual(main(["push", "local"]), 0)
+            self.assertEqual(main(["view", "--no-progress"]), 0)
+            self.assertEqual(main(["view", "local", "--jobs", "2", "--timeout", "5"]), 0)
+            self.assertEqual(main(["view", "local", "--untracked", "--no-progress"]), 0)
+            self.assertEqual(main(["status", "local", "--no-progress"]), 0)
+            self.assertEqual(main(["local", "--no-progress"]), 0)
+            self.assertEqual(main(["push", "--no-progress"]), 0)
+            self.assertEqual(main(["push", "local", "--jobs", "2", "--timeout", "5"]), 0)
 
 
 if __name__ == "__main__":

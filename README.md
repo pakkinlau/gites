@@ -52,6 +52,16 @@ gites status win
 gites win
 ```
 
+Large repo roots can be slow on WSL paths such as `/mnt/c/...`. `view`,
+`status`, and object shortcuts inspect repositories in parallel, show progress
+by default, and skip expensive untracked-file enumeration unless requested:
+
+```bash
+gites view win --jobs 16 --timeout 20
+gites view win --untracked
+gites view win --no-progress
+```
+
 Preview what would be pushed:
 
 ```bash
