@@ -129,6 +129,8 @@ class PlannerSyncTests(unittest.TestCase):
 
             self.assertEqual(main(["dirs"]), 0)
             self.assertEqual(main(["where"]), 0)
+            self.assertEqual(main(["view"]), 0)
+            self.assertEqual(main(["view", "local"]), 0)
             self.assertEqual(main(["push"]), 0)
 
 

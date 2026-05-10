@@ -34,7 +34,16 @@ def _resolve_root(args: argparse.Namespace) -> Path:
 
 
 def _resolve_simple_root(args: argparse.Namespace) -> tuple[str, Path, str]:
-    name, selected = active_dir_config()
+    requested_name = getattr(args, "name", None)
+    if requested_name:
+        config = load_user_config()
+        dirs = config.get("dirs", {})
+        if requested_name not in dirs:
+            raise ValueError(f"unknown dir: {requested_name}")
+        name = requested_name
+        selected = dirs[requested_name]
+    else:
+        name, selected = active_dir_config()
     root = Path(getattr(args, "root", None) or selected["path"]).expanduser().resolve()
     branch = getattr(args, "branch", None) or selected.get("branch") or "main"
     return name, root, branch
@@ -173,6 +182,20 @@ def cli_push(args: argparse.Namespace) -> int:
     return 0
 
 
+def cli_view(args: argparse.Namespace) -> int:
+    name, root, branch = _resolve_simple_root(args)
+    options = SyncOptions(
+        root=root,
+        branch=branch,
+        message=None,
+        apply=False,
+        max_file_size_mb=args.max_file_size_mb or 25,
+    )
+    print(f"dir: {name}  root: {root}  branch: {branch}")
+    print(render_plan(build_plan(options)))
+    return 0
+
+
 def cli_where(_args: argparse.Namespace) -> int:
     try:
         name, selected = active_dir_config()
@@ -289,6 +312,13 @@ def build_parser() -> argparse.ArgumentParser:
     push.add_argument("--branch", help="Override branch safety check")
     push.add_argument("--max-file-size-mb", type=int)
     push.set_defaults(func=cli_push)
+
+    view = subparsers.add_parser("view", help="Show repo status table for a saved directory")
+    view.add_argument("name", nargs="?", help="Saved dir name. Defaults to the active dir.")
+    view.add_argument("--root", help="Override saved root directory")
+    view.add_argument("--branch", help="Override branch safety check")
+    view.add_argument("--max-file-size-mb", type=int)
+    view.set_defaults(func=cli_view)
 
     plan = subparsers.add_parser("plan", help="Inspect repositories without changing them")
     _add_repo_selection_args(plan)

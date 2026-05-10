@@ -43,6 +43,13 @@ Switch active root:
 gites use win
 ```
 
+Show the current repo-state table for a saved root:
+
+```bash
+gites view
+gites view win
+```
+
 Preview what would be pushed:
 
 ```bash

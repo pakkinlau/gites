@@ -3,6 +3,7 @@ Large-radius rework toward deterministic repo-family checkpointing.
 
 Added:
 - Simple user workflow: `gites init`, `gites dirs`, `gites use`, and `gites push`.
+- `gites view [name]` for read-only repo-state tables over saved directories.
 - `gites plan` for non-mutating repository inspection.
 - `gites sync --dry-run` and `gites sync --apply --message ...`.
 - Safety refusals for detached HEAD, in-progress Git operations, conflicts, wrong branch, missing remotes/upstreams, behind/diverged branches, protected paths, large files, and missing apply messages.
