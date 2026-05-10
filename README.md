@@ -9,8 +9,15 @@ Use it when you have a directory full of Git repos and need a practical way to
 inspect, checkpoint, and push them without hand-running `git status`, `git
 commit`, and `git push` in every folder.
 
+The interface is intentionally context-like: register a directory as a named
+instance, list the instances, select the active one, then run short commands
+against it. If you are used to Docker contexts or named environments, `gites`
+applies that same small mental model to repo families.
+
 ## Why Gites
 
+- Define a directory of repositories as a named instance, then select it from a
+  list.
 - One command shows a table for every repo in a saved root.
 - One command previews or applies a bulk Git checkpoint.
 - Unsafe repos are refused instead of force-pushed or silently modified.
@@ -59,14 +66,14 @@ then operate on that named object.
 Register the current directory as a repo root:
 
 ```bash
-cd ~/repos/All_hl_repo
-gites init --name hl --branch main
+cd ~/repos/work
+gites init --name work --branch main
 ```
 
 Or register an explicit path:
 
 ```bash
-gites init ~/repos/All_hl_repo --name hl --branch main
+gites init ~/repos/work --name work --branch main
 ```
 
 List saved roots:
@@ -78,16 +85,37 @@ gites dirs
 Switch active root:
 
 ```bash
-gites use hl
+gites use work
 ```
 
 Show the current repo-state table for a saved root:
 
 ```bash
 gites view
-gites view hl
-gites status hl
-gites hl
+gites view work
+gites status work
+gites work
+```
+
+Viewing a named instance prints the selected directory, optional progress, and
+then a single table for the repositories inside that instance:
+
+```text
+$ gites view work
+dir: work  root: ~/repos/work  branch: main
+untracked scan: skipped (use --untracked for full scan)
+Inspecting 4 repos with 15 worker(s)...
+[1/4] api-service -> noop
+[2/4] web-app -> sync
+[3/4] docs-site -> noop
+[4/4] local-tooling -> refuse
+
+repo           branch  ahead  behind  dirty  untracked  action  reason
+-------------  ------  -----  ------  -----  ---------  ------  --------------------------------
+api-service    main    0      0       no     no         noop    working tree clean
+web-app        main    1      0       yes    no         sync
+docs-site      main    0      0       no     no         noop    working tree clean
+local-tooling  main    0      0       no     no         refuse  missing origin remote
 ```
 
 `view`, `status`, and object shortcuts inspect repositories in parallel, show
@@ -95,23 +123,23 @@ progress by default, use 15 workers, apply a 60 second per-Git-command timeout,
 and skip expensive untracked-file enumeration unless requested:
 
 ```bash
-gites view hl
-gites view hl --untracked
-gites view hl --no-progress
-gites view hl --jobs 30 --timeout 120
+gites view work
+gites view work --untracked
+gites view work --no-progress
+gites view work --jobs 30 --timeout 120
 ```
 
 Preview what would be pushed:
 
 ```bash
 gites push
-gites push hl
+gites push work
 ```
 
 Apply with a deterministic commit message:
 
 ```bash
-gites push hl -m "chore: checkpoint repo family 2026-05-11"
+gites push work -m "chore: checkpoint repo family 2026-05-11"
 ```
 
 The saved directory config lives outside the repo at `~/.config/gites/config.json`.
@@ -123,9 +151,9 @@ The status table is meant to be the main decision surface:
 ```text
 repo                  branch  ahead  behind  dirty  untracked  action  reason
 --------------------  ------  -----  ------  -----  ---------  ------  ------------------
-archive-example       main    0      0       no     no         noop    working tree clean
-surface-example       main    1      0       yes    no         sync
-local-only-example    main    0      0       no     no         refuse  missing origin remote
+api-service           main    0      0       no     no         noop    working tree clean
+web-app               main    1      0       yes    no         sync
+local-tooling         main    0      0       no     no         refuse  missing origin remote
 ```
 
 Actions:
@@ -142,7 +170,7 @@ they have an `origin` remote and an upstream branch.
 For large repo roots on WSL, prefer native Linux paths such as:
 
 ```bash
-~/repos/All_hl_repo
+~/repos/work
 ```
 
 Avoid using `/mnt/c/...` as the active root for very large repositories.
@@ -159,19 +187,19 @@ one-off roots. Most interactive use should prefer `view` and `push`.
 Preview repositories under a root directory:
 
 ```bash
-gites plan --root ~/All_github_repo --branch main
+gites plan --root ~/repos/work --branch main
 ```
 
 Dry-run a checkpoint:
 
 ```bash
-gites sync --root ~/All_github_repo --branch main --dry-run
+gites sync --root ~/repos/work --branch main --dry-run
 ```
 
 Apply a checkpoint with an explicit commit message:
 
 ```bash
-gites sync --root ~/All_github_repo \
+gites sync --root ~/repos/work \
   --branch main \
   --apply \
   --message "chore: checkpoint repo family 2026-05-10"
@@ -180,8 +208,8 @@ gites sync --root ~/All_github_repo \
 Read local run ledgers:
 
 ```bash
-gites ledger list --root ~/All_github_repo
-gites ledger show RUN_ID --root ~/All_github_repo
+gites ledger list --root ~/repos/work
+gites ledger show RUN_ID --root ~/repos/work
 ```
 
 Ledgers are written under `.gites/ledgers/` inside the selected root. That directory is intentionally ignored by Git.
