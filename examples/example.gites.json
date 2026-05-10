@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "root_directories": {
+    "linux": "/home/you/All_github_repo",
+    "windows": "C:\\Users\\you\\Documents\\All_github_repo"
+  },
+  "families": {
+    "default": {
+      "branch": "main",
+      "repos": [
+        "example-repo-one",
+        "example-repo-two"
+      ],
+      "commit_message_template": "chore({family}): checkpoint {date}"
+    }
+  },
+  "safety": {
+    "max_file_size_mb": 25,
+    "protected_paths": [
+      ".env",
+      "secrets/",
+      "private/",
+      "internal/"
+    ]
+  }
+}

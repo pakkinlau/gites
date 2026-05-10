@@ -1,36 +1,30 @@
 name: Publish to PyPI
+
 on:
   push:
-    branches:
-      - main  # Change this to your default branch name
+    tags:
+      - "v*"
 
 jobs:
-  build:
+  publish:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
-          python-version: 3.8  # Replace with the Python version you want to use
+          python-version: "3.12"
 
-      - name: Install Dependencies
+      - name: Build distributions
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install wheel
+          python -m pip install build
+          python -m build
 
-      - name: Install twine
-        run: pip install twine
-
-        # No requirements!  
-      - name: Build and Publish
-        run: |
-          python setup.py sdist bdist_wheel
-          python -m twine upload dist/*
-        env:
-          TWINE_USERNAME: __token__  
-          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}  # No need to change here! Edit it in github website.
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          password: ${{ secrets.PYPI_TOKEN }}

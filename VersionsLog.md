@@ -1,3 +1,19 @@
+-> May 10, 2026:
+Large-radius rework toward deterministic repo-family checkpointing.
+
+Added:
+- `gites plan` for non-mutating repository inspection.
+- `gites sync --dry-run` and `gites sync --apply --message ...`.
+- Safety refusals for detached HEAD, in-progress Git operations, conflicts, wrong branch, missing remotes/upstreams, behind/diverged branches, protected paths, large files, and missing apply messages.
+- Append-only local JSONL ledgers under `.gites/ledgers/`.
+- Manifest validation and local manifest template generation.
+- Modern `pyproject.toml` packaging.
+- Focused tests using temporary local Git remotes.
+
+Removed from the public tracked surface:
+- editor state, Obsidian workspace files, bytecode caches, generated diagrams, old screenshots, and legacy internal scratch folders.
+- legacy `lpush`, `lpull`, `lclone`, and the old `subpackage` implementation.
+
 -> Aug 23, 2023:
 Add: `JSONHandler.py`, `JSONUpdater.py`
 Changes: 

@@ -1,0 +1,86 @@
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Build and packaging artifacts
+build/
+dist/
+*.egg-info/
+*.egg
+
+# Virtual environments
+.venv/
+.venv*/
+venv/
+env/
+ENV/
+.envrc
+
+# Local editor and workspace state
+.vscode/
+.idea/
+.obsidian/
+*.swp
+*.swo
+
+# Local OS files
+.DS_Store
+Thumbs.db
+
+# Secrets and credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+*.cer
+*.token
+*.secret
+secrets/
+
+# Private notes, exports, and scratch work
+private/
+internal/
+_private/
+_internal/
+_scratch/
+scratch/
+tmp/
+temp/
+notes.local/
+*.local.md
+*.private.md
+ChatGPT-*.md
+
+# Local gites user state and generated run records
+my_gites.json
+*.gites.json
+*.gites.local.json
+!examples/*.gites.json
+gites.local.json
+package_setup.local.json
+ledgers/
+ledger/
+.gites/
+*.ledger.jsonl
+
+# Generated diagnostics and local reports
+reports/
+artifacts/
+logs/
+*.log
+*.tmp
+*.dot
+*.gv
+*.puml
+*.gv.pdf
+*.gv.png
