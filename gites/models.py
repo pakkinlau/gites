@@ -66,8 +66,8 @@ class SyncOptions:
     apply: bool = False
     repo_names: tuple[str, ...] = ()
     max_file_size_mb: int = 25
-    jobs: int = 8
-    git_timeout_seconds: float = 30.0
+    jobs: int = 15
+    git_timeout_seconds: float = 60.0
     progress: bool = False
     include_untracked: bool = True
     protected_paths: tuple[str, ...] = (

@@ -7,6 +7,7 @@ Added:
 - `gites status [name]`, `gites push [name]`, `gites where [name]`, and `gites <name>` shortcuts.
 - Parallel inspection, progress output, and per-git-command timeouts for view/status/push previews.
 - Faster default `view/status` on WSL roots by skipping untracked-file enumeration unless `--untracked` is passed.
+- Default inspection settings changed to 15 workers and a 60-second per-git-command timeout.
 - `gites plan` for non-mutating repository inspection.
 - `gites sync --dry-run` and `gites sync --apply --message ...`.
 - Safety refusals for detached HEAD, in-progress Git operations, conflicts, wrong branch, missing remotes/upstreams, behind/diverged branches, protected paths, large files, and missing apply messages.

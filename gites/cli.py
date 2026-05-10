@@ -93,8 +93,8 @@ def _options_from_args(args: argparse.Namespace, apply: bool = False) -> SyncOpt
         apply=apply,
         repo_names=repo_names,
         max_file_size_mb=max_file_size_mb or 25,
-        jobs=getattr(args, "jobs", 8) or 8,
-        git_timeout_seconds=getattr(args, "timeout", 30.0) or 30.0,
+        jobs=getattr(args, "jobs", 15) or 15,
+        git_timeout_seconds=getattr(args, "timeout", 60.0) or 60.0,
         progress=getattr(args, "progress", False),
         include_untracked=getattr(args, "untracked", True),
         protected_paths=protected_paths,
@@ -336,8 +336,8 @@ def build_parser() -> argparse.ArgumentParser:
     push.add_argument("--root", help="Override active root directory")
     push.add_argument("--branch", help="Override branch safety check")
     push.add_argument("--max-file-size-mb", type=int)
-    push.add_argument("--jobs", type=int, default=8, help="Parallel workers for inspection")
-    push.add_argument("--timeout", type=float, default=30.0, help="Per-git-command timeout in seconds")
+    push.add_argument("--jobs", type=int, default=15, help="Parallel workers for inspection")
+    push.add_argument("--timeout", type=float, default=60.0, help="Per-git-command timeout in seconds")
     push.add_argument("--no-progress", action="store_true", help="Hide inspection progress")
     push.set_defaults(func=cli_push)
 
@@ -346,8 +346,8 @@ def build_parser() -> argparse.ArgumentParser:
     view.add_argument("--root", help="Override saved root directory")
     view.add_argument("--branch", help="Override branch safety check")
     view.add_argument("--max-file-size-mb", type=int)
-    view.add_argument("--jobs", type=int, default=8, help="Parallel workers for inspection")
-    view.add_argument("--timeout", type=float, default=30.0, help="Per-git-command timeout in seconds")
+    view.add_argument("--jobs", type=int, default=15, help="Parallel workers for inspection")
+    view.add_argument("--timeout", type=float, default=60.0, help="Per-git-command timeout in seconds")
     view.add_argument("--no-progress", action="store_true", help="Hide inspection progress")
     view.add_argument("--untracked", action="store_true", help="Include untracked-file scan. Slower on large WSL roots.")
     view.set_defaults(func=cli_view)
@@ -357,8 +357,8 @@ def build_parser() -> argparse.ArgumentParser:
     status.add_argument("--root", help="Override saved root directory")
     status.add_argument("--branch", help="Override branch safety check")
     status.add_argument("--max-file-size-mb", type=int)
-    status.add_argument("--jobs", type=int, default=8, help="Parallel workers for inspection")
-    status.add_argument("--timeout", type=float, default=30.0, help="Per-git-command timeout in seconds")
+    status.add_argument("--jobs", type=int, default=15, help="Parallel workers for inspection")
+    status.add_argument("--timeout", type=float, default=60.0, help="Per-git-command timeout in seconds")
     status.add_argument("--no-progress", action="store_true", help="Hide inspection progress")
     status.add_argument("--untracked", action="store_true", help="Include untracked-file scan. Slower on large WSL roots.")
     status.set_defaults(func=cli_view)
@@ -410,8 +410,8 @@ def _add_repo_selection_args(parser: argparse.ArgumentParser) -> None:
 
 def _add_safety_args(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--max-file-size-mb", type=int, help="Refuse changed files larger than this")
-    parser.add_argument("--jobs", type=int, default=8, help="Parallel workers for inspection")
-    parser.add_argument("--timeout", type=float, default=30.0, help="Per-git-command timeout in seconds")
+    parser.add_argument("--jobs", type=int, default=15, help="Parallel workers for inspection")
+    parser.add_argument("--timeout", type=float, default=60.0, help="Per-git-command timeout in seconds")
     parser.add_argument("--progress", action="store_true", help="Show inspection progress")
     parser.add_argument("--untracked", action="store_true", default=True, help=argparse.SUPPRESS)
 

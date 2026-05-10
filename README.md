@@ -57,7 +57,7 @@ Large repo roots can be slow on WSL paths such as `/mnt/c/...`. `view`,
 by default, and skip expensive untracked-file enumeration unless requested:
 
 ```bash
-gites view win --jobs 16 --timeout 20
+gites view win --jobs 15 --timeout 60
 gites view win --untracked
 gites view win --no-progress
 ```
