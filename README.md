@@ -26,6 +26,23 @@ applies that same small mental model to repo families.
 - Works well for WSL users who keep large Git repo families on native Linux
   paths instead of slow `/mnt/c/...` checkouts.
 
+## Scope
+
+Gites intentionally stays small. It is a repo-family pusher and status viewer:
+
+- inspect child Git repositories under a saved root
+- show branch, dirty, ahead, behind, and safety state
+- create deterministic checkpoint commits for eligible repos
+- push eligible repos without force-pushing
+- keep local run ledgers ignored and private
+
+Gites is not a migration framework, archive validator, governance engine,
+HistoryLedger instance manager, or content classifier. Project-specific
+integrity checks should live in the relevant project tool, not in `gites`.
+For example, HistoryLedger intake/migration closure checks belong in
+`RepoAutomationTool/RepoIntakeMigrator`, while `gites` may still be used later
+to push that repo group once it is ready.
+
 Typical use cases include multi-repo project families, research/code archives,
 documentation surface repos, generated repo sets, and teams that want some of
 the operational convenience of a monorepo without merging repositories together.
