@@ -1,7 +1,6 @@
 from __future__ import annotations
 
-from collections import Counter
-
+from .change_summary import summarize_changed_files
 from .models import PlanEntry, SyncRunResult
 
 
@@ -49,21 +48,29 @@ def render_run(result: SyncRunResult) -> str:
         lines.append("")
         lines.append(f"{title}:")
         for repo in active_without_failed:
-            lines.append(f"- {repo.name}: {_change_stats(repo.changed_files)}; {_head_range(repo.old_head, repo.new_head)}")
+            lines.append(
+                f"- {repo.name}: {summarize_changed_files(repo.changed_files)}; "
+                f"{_head_range(repo.old_head, repo.new_head)}; "
+                f"commit: {_subject(repo.commit_message)}"
+            )
 
     if refused:
         lines.append("")
         lines.append("refused:")
         for repo in refused:
             reason = "; ".join(repo.reasons) or repo.error or "refused"
-            detail = _change_stats(repo.changed_files)
+            detail = summarize_changed_files(repo.changed_files)
             lines.append(f"- {repo.name}: {detail}; {reason}")
 
     if failed:
         lines.append("")
         lines.append("failed:")
         for repo in failed:
-            lines.append(f"- {repo.name}: {_change_stats(repo.changed_files)}; {_head_range(repo.old_head, repo.new_head)}")
+            lines.append(
+                f"- {repo.name}: {summarize_changed_files(repo.changed_files)}; "
+                f"{_head_range(repo.old_head, repo.new_head)}; "
+                f"commit: {_subject(repo.commit_message)}"
+            )
             if repo.error:
                 lines.append(f"  error: {_one_line(repo.error)}")
 
@@ -82,38 +89,10 @@ def _head_range(old_head: str | None, new_head: str | None) -> str:
     return f"{old} -> {new}"
 
 
-def _change_stats(changed_files) -> str:
-    if not changed_files:
-        return "no file changes"
-    counts = Counter(_change_kind(changed.status) for changed in changed_files)
-    ordered = [
-        ("modified", counts["modified"]),
-        ("added", counts["added"]),
-        ("deleted", counts["deleted"]),
-        ("renamed", counts["renamed"]),
-        ("untracked", counts["untracked"]),
-        ("conflicted", counts["conflicted"]),
-        ("other", counts["other"]),
-    ]
-    parts = [f"{count} {name}" for name, count in ordered if count]
-    total = len(changed_files)
-    return f"{total} file(s): {', '.join(parts)}"
-
-
-def _change_kind(status: str) -> str:
-    if "U" in status:
-        return "conflicted"
-    if status == "??":
-        return "untracked"
-    if "R" in status or "C" in status:
-        return "renamed"
-    if "D" in status:
-        return "deleted"
-    if "A" in status:
-        return "added"
-    if "M" in status:
-        return "modified"
-    return "other"
+def _subject(message: str | None) -> str:
+    if not message:
+        return "-"
+    return message.splitlines()[0]
 
 
 def _one_line(value: str) -> str:

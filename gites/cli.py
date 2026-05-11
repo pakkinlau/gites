@@ -167,12 +167,14 @@ def cli_use(args: argparse.Namespace) -> int:
 def cli_push(args: argparse.Namespace) -> int:
     name, root, branch = _resolve_simple_root(args)
     message = args.message
-    apply = bool(message) and not args.dry_run
+    apply = not args.dry_run
     options = SyncOptions(
         root=root,
         branch=branch,
         message=message,
         apply=apply,
+        auto_message=True,
+        instance_name=name,
         max_file_size_mb=args.max_file_size_mb or 25,
         jobs=args.jobs,
         git_timeout_seconds=args.timeout,
@@ -183,7 +185,9 @@ def cli_push(args: argparse.Namespace) -> int:
     mode = "apply" if apply else "dry-run"
     print(f"dir: {name}  root: {root}  branch: {branch}  mode: {mode}")
     if not apply:
-        print("No commit was made. Add -m/--message to apply.")
+        print("No commit was made. Omit --dry-run to apply.")
+    elif not message:
+        print("Using generated per-repo commit messages.")
     print(render_run(result))
     if any(repo.status in {"failed", "refused"} for repo in result.repos):
         return 1
@@ -329,10 +333,10 @@ def build_parser() -> argparse.ArgumentParser:
     where.add_argument("name", nargs="?", help="Saved dir name. Defaults to the active dir.")
     where.set_defaults(func=cli_where)
 
-    push = subparsers.add_parser("push", help="Preview or apply checkpoint for the active directory")
+    push = subparsers.add_parser("push", help="Apply checkpoint for the active directory")
     push.add_argument("name", nargs="?", help="Saved dir name. Defaults to the active dir.")
-    push.add_argument("-m", "--message", help="Commit message. If omitted, push runs as a dry-run.")
-    push.add_argument("--dry-run", action="store_true", help="Preview even when a message is provided")
+    push.add_argument("-m", "--message", help="Override generated per-repo commit messages")
+    push.add_argument("--dry-run", action="store_true", help="Preview without committing or pushing")
     push.add_argument("--root", help="Override active root directory")
     push.add_argument("--branch", help="Override branch safety check")
     push.add_argument("--max-file-size-mb", type=int)

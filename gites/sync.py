@@ -1,19 +1,22 @@
 from __future__ import annotations
 
 import uuid
+from datetime import datetime
 
+from .change_summary import checkpoint_subject, summarize_changed_files
 from .git_backend import GitBackend
 from .ledger import append_run
-from .models import RepoSyncResult, SyncOptions, SyncRunResult
+from .models import ChangedFile, RepoSyncResult, SyncOptions, SyncRunResult
 from .planner import build_plan
 
 
 def run_sync(options: SyncOptions, git: GitBackend | None = None) -> SyncRunResult:
-    if options.apply and not options.message:
+    if options.apply and not options.message and not options.auto_message:
         raise ValueError("--message is required when using --apply")
 
     git = git or GitBackend()
     run_id = str(uuid.uuid4())
+    timestamp = datetime.now().astimezone().isoformat(timespec="seconds")
     entries = build_plan(options, git=git)
     results: list[RepoSyncResult] = []
 
@@ -28,6 +31,14 @@ def run_sync(options: SyncOptions, git: GitBackend | None = None) -> SyncRunResu
             changed_files=list(repo.changed_files),
             reasons=list(entry.reasons),
         )
+        if entry.can_sync:
+            result.commit_message = _commit_message_for_repo(
+                options=options,
+                repo_name=repo.name,
+                run_id=run_id,
+                timestamp=timestamp,
+                changed_files=repo.changed_files,
+            )
 
         if not options.apply:
             result.status = "dry-run"
@@ -64,7 +75,7 @@ def run_sync(options: SyncOptions, git: GitBackend | None = None) -> SyncRunResu
                 results.append(result)
                 continue
 
-            commit = git.run(repo.path, ["commit", "-m", options.message or ""])
+            commit = git.run(repo.path, ["commit", "-m", result.commit_message or ""])
             if not commit.ok:
                 result.status = "failed"
                 result.error = commit.output or "git commit failed"
@@ -98,3 +109,31 @@ def run_sync(options: SyncOptions, git: GitBackend | None = None) -> SyncRunResu
     )
     append_run(run_result)
     return run_result
+
+
+def _commit_message_for_repo(
+    *,
+    options: SyncOptions,
+    repo_name: str,
+    run_id: str,
+    timestamp: str,
+    changed_files: tuple[ChangedFile, ...],
+) -> str:
+    if options.message:
+        return options.message
+
+    instance = options.instance_name or "-"
+    subject = checkpoint_subject(changed_files)
+    return "\n".join(
+        [
+            subject,
+            "",
+            "Gites checkpoint",
+            "",
+            f"Instance: {instance}",
+            f"Repo: {repo_name}",
+            f"Run: {run_id}",
+            f"Time: {timestamp}",
+            f"Changes: {summarize_changed_files(changed_files)}",
+        ]
+    )

@@ -73,6 +73,29 @@ class PlannerSyncTests(unittest.TestCase):
         self.assertIn("chore: deterministic checkpoint", git(repo, "log", "-1", "--pretty=%B"))
         self.assertTrue((self.root / ".gites" / "ledgers").exists())
 
+    def test_sync_can_generate_checkpoint_commit_message(self) -> None:
+        repo = self.create_repo()
+        (repo / "file.txt").write_text("changed\n", encoding="utf-8")
+
+        result = run_sync(
+            SyncOptions(
+                root=self.root,
+                branch="main",
+                message=None,
+                apply=True,
+                auto_message=True,
+                instance_name="local",
+            )
+        )
+
+        self.assertEqual(result.repos[0].status, "pushed")
+        message = git(repo, "log", "-1", "--pretty=%B")
+        self.assertIn("chore(gites): checkpoint 1 file", message)
+        self.assertIn("Gites checkpoint", message)
+        self.assertIn("Instance: local", message)
+        self.assertIn("Repo: repo", message)
+        self.assertIn("Changes: 1 file(s): 1 untracked", message)
+
     def test_sync_refuses_protected_path(self) -> None:
         repo = self.create_repo()
         (repo / ".env").write_text("TOKEN=secret\n", encoding="utf-8")
@@ -162,6 +185,7 @@ class PlannerSyncTests(unittest.TestCase):
                     status="dry-run",
                     old_head="b" * 40,
                     new_head="b" * 40,
+                    commit_message="chore(gites): checkpoint 3 files\n\nBody",
                     changed_files=[
                         ChangedFile(path="file.txt", status=" M"),
                         ChangedFile(path="old.txt", status=" D"),
@@ -185,7 +209,11 @@ class PlannerSyncTests(unittest.TestCase):
         self.assertIn("summary: clean=1, would_sync=1, refused=1, failed=0", output)
         self.assertIn("clean: 1 repo(s) had no changes.", output)
         self.assertIn("would sync:", output)
-        self.assertIn("- changed-repo: 3 file(s): 1 modified, 1 deleted, 1 untracked", output)
+        self.assertIn(
+            "- changed-repo: 3 file(s): 1 modified, 1 deleted, 1 untracked; "
+            "head bbbbbbbbbbbb; commit: chore(gites): checkpoint 3 files",
+            output,
+        )
         self.assertIn("refused:", output)
         self.assertIn("- local-only: no file changes; missing origin remote", output)
 

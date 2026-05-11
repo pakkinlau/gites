@@ -129,33 +129,40 @@ gites view work --no-progress
 gites view work --jobs 30 --timeout 120
 ```
 
-Preview what would be pushed:
+Commit and push eligible repositories:
 
 ```bash
 gites push
 gites push work
 ```
 
-`push` defaults to a dry-run. Its output summarizes clean repositories in one
-line and expands only the repositories that would sync, refuse, or fail:
+`push` applies by default and generates a per-repo checkpoint message when
+`-m/--message` is omitted. Its output summarizes clean repositories in one line
+and expands only the repositories that were pushed, refused, or failed:
 
 ```text
 $ gites push work
-dir: work  root: ~/repos/work  branch: main  mode: dry-run
-No commit was made. Add -m/--message to apply.
+dir: work  root: ~/repos/work  branch: main  mode: apply
+Using generated per-repo commit messages.
 run_id: 2b3389c7-6cf7-4cb6-86d5-2a7fdcf8d6b9
-applied: no
-summary: clean=2, would_sync=1, refused=1, failed=0
+applied: yes
+summary: clean=2, pushed=1, refused=1, failed=0
 clean: 2 repo(s) had no changes.
 
-would sync:
-- web-app: 3 file(s): 2 modified, 1 untracked; head 287d9c3ecebc
+pushed:
+- web-app: 3 file(s): 2 modified, 1 untracked; 287d9c3ecebc -> 8f17ad280c44; commit: chore(gites): checkpoint 3 files
 
 refused:
 - local-tooling: no file changes; missing origin remote
 ```
 
-Apply with a deterministic commit message:
+Preview without committing or pushing:
+
+```bash
+gites push work --dry-run
+```
+
+Override the generated message for all synced repositories:
 
 ```bash
 gites push work -m "chore: checkpoint repo family 2026-05-11"

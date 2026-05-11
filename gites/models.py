@@ -64,6 +64,8 @@ class SyncOptions:
     branch: str | None
     message: str | None
     apply: bool = False
+    auto_message: bool = False
+    instance_name: str | None = None
     repo_names: tuple[str, ...] = ()
     max_file_size_mb: int = 25
     jobs: int = 15
@@ -89,6 +91,7 @@ class RepoSyncResult:
     old_head: str | None = None
     new_head: str | None = None
     commit: str | None = None
+    commit_message: str | None = None
     changed_files: list[ChangedFile] = field(default_factory=list)
     reasons: list[str] = field(default_factory=list)
     error: str | None = None
