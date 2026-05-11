@@ -8,7 +8,8 @@ from unittest.mock import patch
 
 from gites.cli import main
 from gites.config import load_user_config
-from gites.models import SyncOptions
+from gites.models import ChangedFile, RepoSyncResult, SyncOptions, SyncRunResult
+from gites.output import render_run
 from gites.planner import build_plan
 from gites.sync import run_sync
 
@@ -137,6 +138,56 @@ class PlannerSyncTests(unittest.TestCase):
             self.assertEqual(main(["local", "--no-progress"]), 0)
             self.assertEqual(main(["push", "--no-progress"]), 0)
             self.assertEqual(main(["push", "local", "--jobs", "2", "--timeout", "5"]), 0)
+
+    def test_render_run_summarizes_clean_sync_and_refused_repos(self) -> None:
+        result = SyncRunResult(
+            run_id="run-1",
+            root=self.root,
+            message=None,
+            applied=False,
+            repos=[
+                RepoSyncResult(
+                    name="clean-repo",
+                    path=str(self.root / "clean-repo"),
+                    action="noop",
+                    status="dry-run",
+                    old_head="a" * 40,
+                    new_head="a" * 40,
+                    reasons=["working tree clean"],
+                ),
+                RepoSyncResult(
+                    name="changed-repo",
+                    path=str(self.root / "changed-repo"),
+                    action="sync",
+                    status="dry-run",
+                    old_head="b" * 40,
+                    new_head="b" * 40,
+                    changed_files=[
+                        ChangedFile(path="file.txt", status=" M"),
+                        ChangedFile(path="old.txt", status=" D"),
+                        ChangedFile(path="new.txt", status="??"),
+                    ],
+                ),
+                RepoSyncResult(
+                    name="local-only",
+                    path=str(self.root / "local-only"),
+                    action="refuse",
+                    status="dry-run",
+                    old_head="c" * 40,
+                    new_head="c" * 40,
+                    reasons=["missing origin remote"],
+                ),
+            ],
+        )
+
+        output = render_run(result)
+
+        self.assertIn("summary: clean=1, would_sync=1, refused=1, failed=0", output)
+        self.assertIn("clean: 1 repo(s) had no changes.", output)
+        self.assertIn("would sync:", output)
+        self.assertIn("- changed-repo: 3 file(s): 1 modified, 1 deleted, 1 untracked", output)
+        self.assertIn("refused:", output)
+        self.assertIn("- local-only: no file changes; missing origin remote", output)
 
 
 if __name__ == "__main__":

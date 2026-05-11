@@ -25,6 +25,7 @@ def run_sync(options: SyncOptions, git: GitBackend | None = None) -> SyncRunResu
             action=entry.action,
             status="planned",
             old_head=repo.head,
+            changed_files=list(repo.changed_files),
             reasons=list(entry.reasons),
         )
 

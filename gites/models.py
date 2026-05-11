@@ -89,6 +89,7 @@ class RepoSyncResult:
     old_head: str | None = None
     new_head: str | None = None
     commit: str | None = None
+    changed_files: list[ChangedFile] = field(default_factory=list)
     reasons: list[str] = field(default_factory=list)
     error: str | None = None
 

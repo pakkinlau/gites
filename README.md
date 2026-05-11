@@ -136,6 +136,25 @@ gites push
 gites push work
 ```
 
+`push` defaults to a dry-run. Its output summarizes clean repositories in one
+line and expands only the repositories that would sync, refuse, or fail:
+
+```text
+$ gites push work
+dir: work  root: ~/repos/work  branch: main  mode: dry-run
+No commit was made. Add -m/--message to apply.
+run_id: 2b3389c7-6cf7-4cb6-86d5-2a7fdcf8d6b9
+applied: no
+summary: clean=2, would_sync=1, refused=1, failed=0
+clean: 2 repo(s) had no changes.
+
+would sync:
+- web-app: 3 file(s): 2 modified, 1 untracked; head 287d9c3ecebc
+
+refused:
+- local-tooling: no file changes; missing origin remote
+```
+
 Apply with a deterministic commit message:
 
 ```bash
